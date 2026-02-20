@@ -1,0 +1,70 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+:root {
+  --background: #F8F9FA;
+  --foreground: #1A1A1A;
+  --primary-blue: #1152D4;
+  --primary-dark: #0A3D91;
+  --accent-orange: #FF8A00;
+  --accent-soft: #FFF4E6;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --card-bg: #FFFFFF;
+  --input-bg: #FFFFFF;
+  --border-color: #E5E7EB;
+  --color-ninos: #5CC8F2;
+  --color-jovenes: #FF9A17;
+  --color-adultos: #0477BF;
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --primary-blue: #3b82f6;
+  --primary-dark: #2563eb;
+  --accent-orange: #fbbf24;
+  --accent-soft: #1e293b;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --card-bg: #1e293b;
+  --input-bg: #334155;
+  --border-color: #334155;
+  --color-ninos: #5CC8F2;
+  --color-jovenes: #FF9A17;
+  --color-adultos: #0477BF;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary-blue);
+  --color-primary-dark: var(--primary-dark);
+  --color-accent: var(--accent-orange);
+  --color-accent-soft: var(--accent-soft);
+  --color-card: var(--card-bg);
+  --color-input: var(--input-bg);
+  --color-border: var(--border-color);
+  --color-ninos: var(--color-ninos);
+  --color-jovenes: var(--color-jovenes);
+  --color-adultos: var(--color-adultos);
+  --shadow-premium: var(--card-shadow);
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+  min-height: 100dvh;
+  -webkit-tap-highlight-color: transparent;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* Specific overrides for Leaflet in dark mode */
+.dark .leaflet-tile {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+.dark .leaflet-container {
+  background: #0f172a;
+}

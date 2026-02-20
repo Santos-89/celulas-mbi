@@ -1,0 +1,16 @@
+export interface CellGroup {
+    id: string;
+    leaderName: string;
+    leaderPhone: string;
+    type: "Niños" | "Jóvenes" | "Adultos";
+    day: string;
+    time: string;
+    address: string;
+    neighborhood: string;
+    coordinates: {
+        lat: number;
+        lng: number;
+    };
+}
+
+export const CELL_TYPES = ["Niños", "Jóvenes", "Adultos"] as const;
