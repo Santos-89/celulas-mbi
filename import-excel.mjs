@@ -1,35 +1,50 @@
-import * as XLSX from 'xlsx';
+import pkg from 'xlsx';
+const { readFile, utils } = pkg;
 import * as fs from 'fs';
 import path from 'path';
 
-const EXCEL_PATH = "/Volumes/Proyectos/App Células/Datos Células.xlsx";
+const EXCEL_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSW4b28Ow3VM5yWIv2RDtzxtj9gVHUPc-Jv17XSRwHvqD3URf06lHaO84lOKp6OSlkOgqNeuiCajZ8a/pub?output=xlsx";
 const OUTPUT_PATH = "./src/data/cells.ts";
 
 /**
- * Script para transformar el Excel de Células en el formato TypeScript de la App.
+ * Script para transformar el Google Sheet de Células en el formato TypeScript de la App.
  * Ejecución: node import-excel.mjs
  */
 
 async function run() {
     try {
-        console.log("📂 Leyendo archivo Excel...");
-        const workbook = XLSX.readFile(EXCEL_PATH);
+        console.log("☁️ Descargando datos desde Google Sheets...");
+        const response = await fetch(EXCEL_URL);
+        if (!response.ok) throw new Error(`Error al descargar: ${response.statusText}`);
+
+        const buffer = await response.arrayBuffer();
+        const workbook = pkg.read(buffer);
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
-        const rawData = XLSX.utils.sheet_to_json(worksheet);
+        const rawData = utils.sheet_to_json(worksheet);
 
         console.log(`✅ ${rawData.length} filas encontradas.`);
 
         const processedCells = rawData.map((row, index) => {
             // Mapeo de columnas del Excel (ajustar según los nombres exactos)
             const id = (index + 1).toString();
-            const leaderName = row['LIDER'] || 'Sin nombre';
-            const leaderPhone = row['CELULAR'] || '';
-            const type = row['TIPO'] || 'Adultos';
-            const day = row['DIA'] || 'Martes';
-            const time = row['HORA'] || '7:00 PM';
+            const leaderName = row['LÍDER'] || 'Sin nombre';
+            const leaderPhone = row['TELÉFONO'] || '';
+            const type = row['CÉLULA DE'] || 'Adultos';
+            const day = row['DÍA DE CÉLULA'] || 'Martes';
+            let time = row['HORA'] || '7:00 PM';
+
+            // Si Excel lo entrega como número (fracción de día), formatearlo
+            if (typeof time === 'number') {
+                const totalSeconds = Math.round(time * 86400);
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                const h12 = hours % 12 || 12;
+                time = `${h12}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+            }
             const address = row['DIRECCIÓN'] || '';
-            const neighborhood = row['BARRIO'] || address;
+            const neighborhood = address; // Simplificado ya que no hay columna BARRIO explícita en el sample detectado
 
             // Coordenadas base por barrio (para evitar que todas estén en el centro)
             // Si el Excel tiene columnas LATITUD y LONGITUD, úsalas aquí.

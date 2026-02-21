@@ -48,24 +48,24 @@ export default function Home() {
   return (
     <main className="relative flex flex-col h-screen h-[100dvh] bg-background text-foreground overflow-hidden">
       {/* Header / Search Bar */}
-      <div className="absolute top-0 left-0 right-0 z-10 p-4 md:p-6 bg-gradient-to-b from-background/90 to-transparent">
+      <div className="absolute top-0 left-0 right-0 z-20 p-4 md:p-6 bg-gradient-to-b from-background/95 via-background/60 to-transparent backdrop-blur-[1px]">
         <div className="flex flex-col gap-4 max-w-2xl mx-auto">
-          <div className="flex gap-2 items-center bg-card rounded-2xl p-2 shadow-premium border border-border">
-            <div className="pl-3 text-gray-400">
+          <div className="flex gap-2 items-center bg-card/90 backdrop-blur-2xl rounded-[2rem] p-2 shadow-premium border border-border mt-safe">
+            <div className="pl-4 text-primary">
               <Search className="w-5 h-5" />
             </div>
             <input
               type="text"
-              placeholder="Buscar por barrio o líder..."
-              className="flex-1 bg-transparent border-none outline-none text-foreground py-2 placeholder:text-gray-400"
+              placeholder="Buscar barrio o líder..."
+              className="flex-1 bg-transparent border-none outline-none text-foreground py-3 text-sm font-medium placeholder:text-gray-400"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <div className="flex items-center gap-2 pr-1">
+            <div className="flex items-center gap-1.5 pr-1.5">
               <ThemeToggle />
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className={`p-2 rounded-xl transition-colors ${showFilters ? "bg-primary text-white" : "hover:bg-primary/10 text-primary"}`}
+                className={`p-2.5 rounded-2xl transition-all duration-300 ${showFilters ? "bg-primary text-white shadow-lg scale-105" : "hover:bg-primary/10 text-primary"}`}
               >
                 <SlidersHorizontal className="w-5 h-5" />
               </button>
@@ -74,16 +74,19 @@ export default function Home() {
 
           {/* Filters Panel */}
           {showFilters && (
-            <Card className="animate-in fade-in slide-in-from-top-4 duration-200">
-              <div className="space-y-4">
+            <Card className="animate-in fade-in slide-in-from-top-4 duration-300 bg-card/90 backdrop-blur-xl border-border/50">
+              <div className="space-y-5">
                 <div>
-                  <p className="text-xs font-bold text-gray-400 uppercase mb-2">Tipo de Célula</p>
+                  <div className="flex justify-between items-center mb-3">
+                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Tipo de Célula</p>
+                    {filterType !== "Todas" && <Badge variant={filterType.toLowerCase() as any} className="h-5">{filterType}</Badge>}
+                  </div>
                   <div className="flex flex-wrap gap-2">
                     {["Todas", "Niños", "Jóvenes", "Adultos"].map((type) => (
                       <button
                         key={type}
                         onClick={() => setFilterType(type)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${filterType === type ? "bg-primary text-white" : "bg-background text-foreground hover:bg-border border border-border"
+                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${filterType === type ? "bg-primary text-white shadow-md" : "bg-background/50 text-foreground hover:bg-border border border-border/30"
                           }`}
                       >
                         {type}
@@ -93,13 +96,13 @@ export default function Home() {
                 </div>
 
                 <div>
-                  <p className="text-xs font-bold text-gray-400 uppercase mb-2">Día de Reunión</p>
+                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Día de Reunión</p>
                   <div className="flex flex-wrap gap-2">
                     {["Todos", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"].map((day) => (
                       <button
                         key={day}
                         onClick={() => setFilterDay(day)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${filterDay === day ? "bg-primary text-white" : "bg-background text-foreground hover:bg-border border border-border"
+                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${filterDay === day ? "bg-primary text-white shadow-md" : "bg-background/50 text-foreground hover:bg-border border border-border/30"
                           }`}
                       >
                         {day}
@@ -112,11 +115,11 @@ export default function Home() {
                   <button
                     onClick={() => {
                       setShowFilters(false);
-                      setViewMode("list");
+                      if (filteredCells.length > 0) setViewMode("list");
                     }}
-                    className="w-full py-2 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary-dark transition-colors"
+                    className="w-full py-3.5 bg-primary text-white text-sm font-bold rounded-2xl hover:bg-primary-dark transition-all shadow-lg active:scale-[0.98]"
                   >
-                    Aplicar Filtros
+                    Ver {filteredCells.length} células
                   </button>
                 </div>
               </div>
@@ -126,9 +129,9 @@ export default function Home() {
           {isFiltered && (
             <button
               onClick={clearFilters}
-              className="flex items-center gap-1.5 px-4 py-1.5 bg-background/80 backdrop-blur-md border border-border rounded-full text-xs font-bold text-foreground shadow-sm hover:bg-border transition-all self-center"
+              className="flex items-center gap-1.5 px-5 py-2 bg-card/80 backdrop-blur-md border border-border/50 rounded-full text-[10px] font-heavy tracking-widest uppercase text-foreground shadow-premium hover:bg-border transition-all self-center animate-in zoom-in-95 duration-200"
             >
-              <X className="w-3 h-3" />
+              <X className="w-3.5 h-3.5" />
               Limpiar Filtros
             </button>
           )}
@@ -145,7 +148,7 @@ export default function Home() {
         ) : (
           <div className="h-full pt-24 pb-8 px-4 overflow-y-auto bg-background">
             <div className="max-w-2xl mx-auto space-y-3">
-              <h1 className="text-lg font-bold text-foreground px-2 mb-4">
+              <h1 className="text-lg font-heavy text-foreground px-2 mb-4 animate-fluid">
                 Células encontradas ({filteredCells.length})
               </h1>
               {filteredCells.map((cell) => (

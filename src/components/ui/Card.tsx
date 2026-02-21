@@ -4,7 +4,7 @@ export function Card({ className, children, onClick }: { className?: string; chi
     return (
         <div
             onClick={onClick}
-            className={cn("bg-card rounded-3xl p-6 shadow-premium border border-border transition-colors duration-300", className)}
+            className={cn("bg-card rounded-[2.5rem] p-6 shadow-premium border border-border/50 transition-all duration-300", className)}
         >
             {children}
         </div>
@@ -21,7 +21,7 @@ export function Badge({ children, className, variant = "default" }: { children: 
     };
 
     return (
-        <span className={cn("px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider", variants[variant], className)}>
+        <span className={cn("px-4 py-1.5 rounded-xl text-[10px] font-heavy uppercase tracking-widest", variants[variant], className)}>
             {children}
         </span>
     );

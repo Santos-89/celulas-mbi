@@ -9,21 +9,19 @@ interface CellDetailProps {
 }
 
 export function CellDetail({ cell, onClose }: CellDetailProps) {
-    const handleCall = () => {
-        window.open(`tel:${cell.leaderPhone}`, "_self");
-    };
-
-    const handleWhatsApp = () => {
-        // Clean number: remove non-digits and leading zero
+    // Pre-calculate URLs to avoid any execution lag during click
+    const whatsappUrl = (() => {
         let cleanNumber = cell.leaderPhone.replace(/\D/g, "");
         if (cleanNumber.startsWith("0")) {
             cleanNumber = cleanNumber.substring(1);
         }
-        // Add Ecuador country code if not present
         const fullNumber = cleanNumber.startsWith("593") ? cleanNumber : `593${cleanNumber}`;
+        const message = encodeURIComponent(`¡Hola ${cell.leaderName}! Vi tu célula en la app de la iglesia y me gustaría asistir. ¿Me puedes ayudar con más información por favor?`);
+        return `https://wa.me/${fullNumber}?text=${message}`;
+    })();
 
-        const message = encodeURIComponent(`¡Hola ${cell.leaderName}! Vi tu célula en la app de la iglesia y me gustaría asistir. ¿Me puedes ayudar con la ubicación exacta?`);
-        window.open(`https://wa.me/${fullNumber}?text=${message}`, "_blank");
+    const handleCall = () => {
+        window.open(`tel:${cell.leaderPhone}`, "_self");
     };
 
     const handleNavigate = () => {
@@ -31,53 +29,64 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
     };
 
     return (
-        <Card className="fixed bottom-0 left-0 right-0 z-50 rounded-t-[3rem] animate-in slide-in-from-bottom duration-300 md:max-w-md md:left-1/2 md:-translate-x-1/2 md:bottom-6 md:rounded-3xl shadow-2xl border-t border-border">
-            <div className="flex justify-between items-start mb-4">
+        <Card className="fixed bottom-0 left-0 right-0 z-50 rounded-t-[3.5rem] animate-fluid md:max-w-md md:left-1/2 md:-translate-x-1/2 md:bottom-6 md:rounded-[3rem] shadow-premium bg-card/95 backdrop-blur-2xl border-t border-border/50 pb-8 md:pb-6">
+            <div className="w-12 h-1.5 bg-border/50 rounded-full mx-auto mb-6 md:hidden" />
+
+            <div className="flex justify-between items-start mb-6">
                 <div className="flex gap-4 items-center">
-                    <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xl uppercase">
+                    <div className="w-16 h-16 rounded-[2rem] bg-primary/10 flex items-center justify-center text-primary font-bold text-xl uppercase shadow-inner">
                         {cell.leaderName.charAt(0)}
                     </div>
                     <div>
-                        <h2 className="text-xl font-bold text-foreground">{cell.leaderName}</h2>
-                        <p className="text-sm text-gray-400 uppercase tracking-tighter">Líder de Célula</p>
+                        <h2 className="text-xl font-heavy text-foreground leading-tight">{cell.leaderName}</h2>
+                        <p className="text-[10px] text-gray-400 uppercase tracking-widest font-bold mt-1">Líder de Célula</p>
                     </div>
                 </div>
-                <button onClick={onClose} className="p-2 hover:bg-border rounded-full transition-colors">
-                    <X className="w-6 h-6 text-gray-400" />
+                <button onClick={onClose} className="p-2.5 bg-background/50 hover:bg-background rounded-2xl border border-border/50 transition-all active:scale-90">
+                    <X className="w-5 h-5 text-gray-400" />
                 </button>
             </div>
 
-            <div className="space-y-4 mb-6">
-                <div className="flex items-center gap-3">
-                    <Badge variant={cell.type === "Niños" ? "niños" : cell.type === "Jóvenes" ? "jóvenes" : "adultos"}>
+            <div className="space-y-4 mb-8">
+                <div className="flex items-center gap-4">
+                    <Badge variant={cell.type.toLowerCase() as any} className="py-1.5 px-4 rounded-xl">
                         {cell.type}
                     </Badge>
-                    <div className="flex items-center gap-1 text-gray-400 text-sm">
-                        <Clock className="w-4 h-4" />
+                    <div className="flex items-center gap-2 text-gray-500 text-xs font-bold">
+                        <Clock className="w-4 h-4 text-primary" />
                         <span>{cell.day} {cell.time}</span>
                     </div>
                 </div>
 
-                <div className="flex items-start gap-3 bg-background p-4 rounded-2xl border border-border">
-                    <MapPin className="w-5 h-5 text-primary mt-0.5" />
+                <div className="flex items-start gap-4 bg-background/40 p-5 rounded-[2rem] border border-border/30">
+                    <div className="p-2.5 bg-primary/10 rounded-xl">
+                        <MapPin className="w-5 h-5 text-primary" />
+                    </div>
                     <div className="text-sm">
-                        <p className="font-semibold text-foreground">{cell.neighborhood}</p>
-                        <p className="text-gray-400">{cell.address}</p>
+                        <p className="font-bold text-foreground mb-1">{cell.neighborhood}</p>
+                        <p className="text-gray-400 text-xs leading-relaxed">{cell.address}</p>
                     </div>
                 </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-                <Button onClick={handleCall} className="gap-2">
-                    <Phone className="w-4 h-4" />
+                <Button onClick={handleCall} className="gap-2.5 rounded-2xl h-14">
+                    <Phone className="w-4.5 h-4.5" />
                     Llamar
                 </Button>
-                <Button onClick={handleWhatsApp} className="gap-2 bg-green-500 hover:bg-green-600 border-none">
-                    <MessageCircle className="w-4 h-4" />
+
+                <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold rounded-2xl shadow-lg shadow-green-500/20 h-14 transition-all active:scale-95"
+                >
+                    <MessageCircle className="w-4.5 h-4.5" />
                     WhatsApp
-                </Button>
-                <Button onClick={handleNavigate} variant="secondary" className="col-span-2 gap-2">
-                    <Navigation className="w-4 h-4" />
+                </a>
+
+                <Button onClick={handleNavigate} variant="secondary" className="col-span-2 gap-2.5 h-14 rounded-2xl border-border/50 font-bold bg-background/50">
+                    <Navigation className="w-4.5 h-4.5 text-primary" />
                     ¿Cómo llegar?
                 </Button>
             </div>

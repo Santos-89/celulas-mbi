@@ -8,12 +8,21 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Localizador de Células | Mi Iglesia",
   description: "Encuentra la célula más cercana a tu ubicación y únete a nuestra comunidad.",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover",
+  manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
     title: "Células Iglesia",
   },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  themeColor: "#1152D4",
 };
 
 export default function RootLayout({

@@ -1,0 +1,17 @@
+{
+    "name": "Localizador de Células",
+    "short_name": "Células",
+    "description": "Encuentra tu célula más cercana",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#020617",
+    "theme_color": "#1152D4",
+    "icons": [
+        {
+            "src": "/next.svg",
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ]
+}
