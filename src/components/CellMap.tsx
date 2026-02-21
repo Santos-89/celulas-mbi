@@ -73,6 +73,7 @@ export default function CellMap({ cells, onSelectCell }: CellMapProps) {
                 "Adultos": createIcon("--color-adultos"),
                 "Jóvenes": createIcon("--color-jovenes"),
                 "Niños": createIcon("--color-ninos"),
+                "Online": createIcon("--color-online"),
                 "Default": createIcon("--foreground")
             });
         }
