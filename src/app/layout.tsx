@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
     title: "Células Iglesia",
   },
+  icons: {
+    apple: "/icon-512.png",
+  }
 };
 
 export const viewport = {
