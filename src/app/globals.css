@@ -15,6 +15,7 @@
   --color-ninos: #0EA5E9;
   --color-jovenes: #F59E0B;
   --color-adultos: #1D4ED8;
+  --color-online: #8B5CF6;
 }
 
 .dark {
@@ -31,6 +32,7 @@
   --color-ninos: #38BDF8;
   --color-jovenes: #FBBF24;
   --color-adultos: #3B82F6;
+  --color-online: #A78BFA;
 }
 
 @theme inline {
@@ -46,6 +48,7 @@
   --color-ninos: var(--color-ninos);
   --color-jovenes: var(--color-jovenes);
   --color-adultos: var(--color-adultos);
+  --color-online: var(--color-online);
   --shadow-premium: var(--card-shadow);
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 }

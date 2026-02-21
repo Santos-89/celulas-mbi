@@ -82,7 +82,7 @@ export default function Home() {
                     {filterType !== "Todas" && <Badge variant={filterType.toLowerCase() as any} className="h-5">{filterType}</Badge>}
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {["Todas", "Niños", "Jóvenes", "Adultos"].map((type) => (
+                    {["Todas", "Niños", "Jóvenes", "Adultos", "Online"].map((type) => (
                       <button
                         key={type}
                         onClick={() => setFilterType(type)}
@@ -161,7 +161,7 @@ export default function Home() {
                     <div>
                       <h3 className="font-bold text-foreground">{cell.leaderName}</h3>
                       <div className="flex items-center gap-2 mt-1">
-                        <Badge variant={cell.type === "Niños" ? "niños" : cell.type === "Jóvenes" ? "jóvenes" : "adultos"}>
+                        <Badge variant={cell.type === "Niños" ? "niños" : cell.type === "Jóvenes" ? "jóvenes" : cell.type === "Online" ? "online" : "adultos"}>
                           {cell.type}
                         </Badge>
                         <span className="text-xs text-gray-500 uppercase">{cell.day} • {cell.time}</span>

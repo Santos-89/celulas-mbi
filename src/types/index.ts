@@ -2,7 +2,7 @@ export interface CellGroup {
     id: string;
     leaderName: string;
     leaderPhone: string;
-    type: "Niños" | "Jóvenes" | "Adultos";
+    type: "Niños" | "Jóvenes" | "Adultos" | "Online";
     day: string;
     time: string;
     address: string;
@@ -13,4 +13,4 @@ export interface CellGroup {
     };
 }
 
-export const CELL_TYPES = ["Niños", "Jóvenes", "Adultos"] as const;
+export const CELL_TYPES = ["Niños", "Jóvenes", "Adultos", "Online"] as const;
