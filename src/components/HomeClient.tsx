@@ -40,15 +40,17 @@ export default function HomeClient() {
   }, []);
 
   const filteredCells = useMemo(() => {
-    return cells.filter((cell) => {
-      const matchesSearch =
-        cell.leaderName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        cell.neighborhood.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        cell.address.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesType = filterType === "Todas" || cell.type === filterType;
-      const matchesDay = filterDay === "Todos" || cell.day === filterDay;
-      return matchesSearch && matchesType && matchesDay;
-    });
+    return cells
+      .filter((cell) => {
+        const matchesSearch =
+          cell.leaderName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          cell.neighborhood.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          cell.address.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesType = filterType === "Todas" || cell.type === filterType;
+        const matchesDay = filterDay === "Todos" || cell.day === filterDay;
+        return matchesSearch && matchesType && matchesDay;
+      })
+      .sort((a, b) => a.leaderName.localeCompare(b.leaderName));
   }, [cells, searchQuery, filterType, filterDay]);
 
   const isFiltered = searchQuery !== "" || filterType !== "Todas" || filterDay !== "Todos";
