@@ -13,26 +13,24 @@ const OUTPUT_PATH = "./src/data/cells.ts";
 
 async function run() {
     try {
-        console.log("☁️ Descargando datos desde Google Sheets...");
-        const response = await fetch(EXCEL_URL);
-        if (!response.ok) throw new Error(`Error al descargar: ${response.statusText}`);
-
-        const buffer = await response.arrayBuffer();
-        const workbook = pkg.read(buffer);
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const rawData = utils.sheet_to_json(worksheet);
+        const getField = (row, alternatives) => {
+            const keys = Object.keys(row);
+            for (const alt of alternatives) {
+                const found = keys.find(k => k.trim().toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") === alt.toUpperCase());
+                if (found) return row[found];
+            }
+            return null;
+        };
 
         console.log(`✅ ${rawData.length} filas encontradas.`);
 
         const processedCells = rawData.map((row, index) => {
-            // Mapeo de columnas del Excel (ajustar según los nombres exactos)
             const id = (index + 1).toString();
-            const leaderName = row['LÍDER'] || 'Sin nombre';
-            const leaderPhone = row['TELÉFONO'] || '';
-            const type = row['CÉLULA DE'] || 'Adultos';
-            const day = row['DÍA DE CÉLULA'] || 'Martes';
-            let time = row['HORA'] || '7:00 PM';
+            const leaderName = getField(row, ['LIDER', 'NOMBRE']) || 'Sin nombre';
+            const leaderPhone = getField(row, ['TELEFONO', 'CELULAR']) || '';
+            const type = getField(row, ['CELULA DE', 'TIPO']) || 'Adultos';
+            const day = getField(row, ['DIA DE CELULA', 'DIA']) || 'Martes';
+            let time = getField(row, ['HORA', 'TIEMPO']) || '7:00 PM';
 
             // Si Excel lo entrega como número (fracción de día), formatearlo
             if (typeof time === 'number') {
@@ -43,17 +41,18 @@ async function run() {
                 const h12 = hours % 12 || 12;
                 time = `${h12}:${minutes.toString().padStart(2, '0')} ${ampm}`;
             }
-            const address = row['DIRECCIÓN'] || '';
-            const neighborhood = address; // Simplificado ya que no hay columna BARRIO explícita en el sample detectado
+            const address = getField(row, ['DIRECION', 'UBICACION']) || '';
+            const neighborhood = getField(row, ['BARRIO']) || address;
 
-            // Coordenadas base por barrio (para evitar que todas estén en el centro)
-            // Si el Excel tiene columnas LATITUD y LONGITUD, úsalas aquí.
-            let lat = -0.2820; // Default (Sur de Quito)
+            let lat = -0.2820;
             let lng = -78.5276;
 
-            if (row['LATITUD'] && row['LONGITUD']) {
-                lat = parseFloat(row['LATITUD']);
-                lng = parseFloat(row['LONGITUD']);
+            const sheetLat = getField(row, ['LATITUD', 'LAT', 'COORDENADA Y']);
+            const sheetLng = getField(row, ['LONGITUD', 'LNG', 'COORDENADA X']);
+
+            if (sheetLat && sheetLng) {
+                lat = parseFloat(sheetLat);
+                lng = parseFloat(sheetLng);
             } else {
                 // Lógica de fallback por barrio conocido
                 const b = neighborhood.toLowerCase();
