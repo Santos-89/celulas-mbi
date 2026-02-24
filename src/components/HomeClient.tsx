@@ -62,9 +62,9 @@ export default function HomeClient() {
   return (
     <main className="relative flex flex-col h-screen h-[100dvh] bg-background text-foreground overflow-hidden">
       {/* Header / Search Bar */}
-      <div className="absolute top-0 left-0 right-0 z-20 p-4 md:p-6 bg-gradient-to-b from-background/95 via-background/60 to-transparent backdrop-blur-[1px]">
+      <div className="fixed top-0 left-0 right-0 z-[100] p-4 md:p-6 bg-gradient-to-b from-background via-background/80 to-transparent mt-safe">
         <div className="flex flex-col gap-4 max-w-2xl mx-auto">
-          <div className="flex gap-2 items-center bg-card/90 backdrop-blur-2xl rounded-[2rem] p-2 shadow-premium border border-border mt-safe">
+          <div className="flex gap-2 items-center bg-card/95 backdrop-blur-2xl rounded-[2rem] p-2 shadow-premium border border-border">
             <div className="pl-4 text-primary">
               <Search className="w-5 h-5" />
             </div>
