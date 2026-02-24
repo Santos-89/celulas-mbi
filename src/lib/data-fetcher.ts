@@ -7,7 +7,9 @@ const CACHE_KEY = "cells_data";
 export async function fetchLiveCells(): Promise<CellGroup[]> {
     try {
         console.log("☁️ Fetching live data from Google Sheets...");
-        const response = await fetch(EXCEL_URL);
+        // Add cache-busting timestamp to URL
+        const fetchUrl = `${EXCEL_URL}&t=${Date.now()}`;
+        const response = await fetch(fetchUrl);
         if (!response.ok) throw new Error(`Fetch failed: ${response.statusText}`);
 
         const arrayBuffer = await response.arrayBuffer();
@@ -17,22 +19,21 @@ export async function fetchLiveCells(): Promise<CellGroup[]> {
         const rawData: any[] = XLSX.utils.sheet_to_json(worksheet);
 
         const processedCells: CellGroup[] = rawData.map((row, index) => {
-            // Helper to find a field regardless of accents or case
-            const getField = (row: any, searchNames: string[]) => {
+            // Robust field mapping helper
+            const getField = (row: any, alternatives: string[]) => {
                 const keys = Object.keys(row);
                 const normalize = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
-                const normalizedSearch = searchNames.map(normalize);
-
-                const foundKey = keys.find(k => normalizedSearch.includes(normalize(k)));
+                const normalizedAlts = alternatives.map(normalize);
+                const foundKey = keys.find(k => normalizedAlts.includes(normalize(k)));
                 return foundKey ? row[foundKey] : undefined;
             };
 
             const id = (index + 1).toString();
-            const leaderName = getField(row, ['LÍDER', 'LIDER', 'NOMBRE']) || 'Sin nombre';
-            const leaderPhone = String(getField(row, ['TELÉFONO', 'TELEFONO', 'CELULAR', 'PHONE']) || '');
-            const type = getField(row, ['CÉLULA DE', 'TIPO', 'TIPO DE CÉLULA']) || 'Adultos';
-            const day = getField(row, ['DÍA DE CÉLULA', 'DIA', 'DIA DE REUNION']) || 'Martes';
-            let time = getField(row, ['HORA']) || '7:00 PM';
+            const leaderName = getField(row, ['LIDER', 'LÍDER', 'NOMBRE']) || 'Sin nombre';
+            const leaderPhone = String(getField(row, ['TELEFONO', 'TELÉFONO', 'CELULAR', 'PHONE']) || '');
+            const type = getField(row, ['CELULA DE', 'TIPO', 'TIPO DE CELULA', 'TIPO DE CÉLULA']) || 'Adultos';
+            const day = getField(row, ['DIA DE CELULA', 'DÍA DE CÉLULA', 'DIA', 'DÍA', 'DIA DE REUNIÓN']) || 'Martes';
+            let time = getField(row, ['HORA', 'TIME', 'HORARIO']) || '7:00 PM';
 
             if (typeof time === 'number') {
                 const totalSeconds = Math.round(time * 86400);
@@ -43,14 +44,14 @@ export async function fetchLiveCells(): Promise<CellGroup[]> {
                 time = `${h12}:${minutes.toString().padStart(2, '0')} ${ampm}`;
             }
 
-            const address = getField(row, ['DIRECCIÓN', 'DIRECCION', 'UBICACIÓN']) || '';
-            const neighborhood = address;
+            const address = getField(row, ['DIRECCION', 'DIRECCIÓN', 'UBICACION', 'UBICACIÓN', 'DIRECION']) || '';
+            const neighborhood = getField(row, ['BARRIO', 'SECTOR']) || address;
 
             let lat = -0.2820;
             let lng = -78.5276;
 
-            const rowLat = getField(row, ['LATITUD', 'LAT']);
-            const rowLng = getField(row, ['LONGITUD', 'LNG', 'LON']);
+            const rowLat = getField(row, ['LATITUD', 'LAT', 'COORDENADA Y', 'Y']);
+            const rowLng = getField(row, ['LONGITUD', 'LNG', 'LON', 'COORDENADA X', 'X']);
 
             if (rowLat && rowLng) {
                 lat = parseFloat(rowLat);
