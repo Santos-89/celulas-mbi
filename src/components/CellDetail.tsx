@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { CellGroup } from "@/types";
 import { Button } from "./ui/Button";
 import { Badge, Card } from "./ui/Card";
@@ -9,16 +10,18 @@ interface CellDetailProps {
 }
 
 export function CellDetail({ cell, onClose }: CellDetailProps) {
-    // Pre-calculate URLs to avoid any execution lag during click
-    const whatsappUrl = (() => {
+    const whatsappData = useMemo(() => {
         let cleanNumber = cell.leaderPhone.replace(/\D/g, "");
         if (cleanNumber.startsWith("0")) {
             cleanNumber = cleanNumber.substring(1);
         }
         const fullNumber = cleanNumber.startsWith("593") ? cleanNumber : `593${cleanNumber}`;
         const message = encodeURIComponent(`¡Hola ${cell.leaderName}! Vi tu célula en la app de la iglesia y me gustaría asistir. ¿Me puedes ayudar con más información por favor?`);
-        return `https://wa.me/${fullNumber}?text=${message}`;
-    })();
+        return {
+            url: `https://wa.me/${fullNumber}?text=${message}`,
+            isValid: cleanNumber.length >= 7
+        };
+    }, [cell]);
 
     const handleCall = () => {
         window.open(`tel:${cell.leaderPhone}`, "_self");
@@ -75,15 +78,26 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
                     Llamar
                 </Button>
 
-                <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold rounded-2xl shadow-lg shadow-green-500/20 h-14 transition-all active:scale-95"
-                >
-                    <MessageCircle className="w-4.5 h-4.5" />
-                    WhatsApp
-                </a>
+                {whatsappData.isValid ? (
+                    <a
+                        href={whatsappData.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold rounded-2xl shadow-lg shadow-green-500/20 h-14 transition-all active:scale-95"
+                    >
+                        <MessageCircle className="w-4.5 h-4.5" />
+                        WhatsApp
+                    </a>
+                ) : (
+                    <Button
+                        disabled
+                        className="gap-2.5 bg-gray-300 text-gray-500 font-bold rounded-2xl h-14"
+                    >
+                        <MessageCircle className="w-4.5 h-4.5" />
+                        WhatsApp
+                    </Button>
+                )}
+
 
                 <Button onClick={handleNavigate} variant="secondary" className="col-span-2 gap-2.5 h-14 rounded-2xl border-border/50 font-bold bg-background/50">
                     <Navigation className="w-4.5 h-4.5 text-primary" />

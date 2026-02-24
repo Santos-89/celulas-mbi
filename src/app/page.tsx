@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { CellDetail } from "@/components/CellDetail";
 import { SAMPLE_CELLS } from "@/data/cells";
 import { CellGroup } from "@/types";
-import { Search, SlidersHorizontal, Map as MapIcon, List as ListIcon, X } from "lucide-react";
+import { fetchLiveCells } from "@/lib/data-fetcher";
+import { Search, SlidersHorizontal, Map as MapIcon, List as ListIcon, X, Loader2 } from "lucide-react";
 import { Badge, Card } from "@/components/ui/Card";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
@@ -16,6 +17,8 @@ const CellMap = dynamic(() => import("@/components/CellMap"), {
 });
 
 export default function Home() {
+  const [cells, setCells] = useState<CellGroup[]>(SAMPLE_CELLS);
+  const [loading, setLoading] = useState(true);
   const [selectedCell, setSelectedCell] = useState<CellGroup | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"map" | "list">("map");
@@ -23,8 +26,22 @@ export default function Home() {
   const [filterType, setFilterType] = useState<string>("Todas");
   const [filterDay, setFilterDay] = useState<string>("Todos");
 
+  useEffect(() => {
+    async function initData() {
+      try {
+        const liveData = await fetchLiveCells();
+        setCells(liveData);
+      } catch (err) {
+        console.error("Could not load live data, using samples", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    initData();
+  }, []);
+
   const filteredCells = useMemo(() => {
-    return SAMPLE_CELLS.filter((cell) => {
+    return cells.filter((cell) => {
       const matchesSearch =
         cell.leaderName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         cell.neighborhood.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -35,7 +52,7 @@ export default function Home() {
 
       return matchesSearch && matchesType && matchesDay;
     });
-  }, [searchQuery, filterType, filterDay]);
+  }, [cells, searchQuery, filterType, filterDay]);
 
   const isFiltered = searchQuery !== "" || filterType !== "Todas" || filterDay !== "Todos";
 
@@ -134,6 +151,13 @@ export default function Home() {
               <X className="w-3.5 h-3.5" />
               Limpiar Filtros
             </button>
+          )}
+
+          {loading && cells.length === 0 && (
+            <div className="flex items-center justify-center gap-2 py-2 text-primary animate-pulse">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span className="text-xs font-bold uppercase tracking-widest">Sincronizando...</span>
+            </div>
           )}
         </div>
       </div>
