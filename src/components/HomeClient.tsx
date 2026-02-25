@@ -90,56 +90,63 @@ export default function HomeClient() {
 
           {/* Filters Panel */}
           {showFilters && (
-            <Card className="animate-in fade-in slide-in-from-top-4 duration-300 bg-card/90 backdrop-blur-xl border-border/50">
-              <div className="space-y-5">
-                <div>
-                  <div className="flex justify-between items-center mb-3">
-                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Tipo de Célula</p>
-                    {filterType !== "Todas" && <Badge variant={filterType.toLowerCase() as any} className="h-5">{filterType}</Badge>}
+            <>
+              {/* Backdrop to close filters */}
+              <div
+                className="fixed inset-0 z-10"
+                onClick={() => setShowFilters(false)}
+              />
+              <Card className="animate-in fade-in slide-in-from-top-4 duration-300 bg-card/90 backdrop-blur-xl border-border/50 relative z-20">
+                <div className="space-y-5">
+                  <div>
+                    <div className="flex justify-between items-center mb-3">
+                      <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Tipo de Célula</p>
+                      {filterType !== "Todas" && <Badge variant={filterType.toLowerCase() as any} className="h-5">{filterType}</Badge>}
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {["Todas", "Niños", "Jóvenes", "Adultos", "Online"].map((type) => (
+                        <button
+                          key={type}
+                          onClick={() => setFilterType(type)}
+                          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${filterType === type ? "bg-primary text-white shadow-md" : "bg-background/50 text-foreground hover:bg-border border border-border/30"
+                            }`}
+                        >
+                          {type}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {["Todas", "Niños", "Jóvenes", "Adultos", "Online"].map((type) => (
-                      <button
-                        key={type}
-                        onClick={() => setFilterType(type)}
-                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${filterType === type ? "bg-primary text-white shadow-md" : "bg-background/50 text-foreground hover:bg-border border border-border/30"
-                          }`}
-                      >
-                        {type}
-                      </button>
-                    ))}
-                  </div>
-                </div>
 
-                <div>
-                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Día de Reunión</p>
-                  <div className="flex flex-wrap gap-2">
-                    {["Todos", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"].map((day) => (
-                      <button
-                        key={day}
-                        onClick={() => setFilterDay(day)}
-                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${filterDay === day ? "bg-primary text-white shadow-md" : "bg-background/50 text-foreground hover:bg-border border border-border/30"
-                          }`}
-                      >
-                        {day}
-                      </button>
-                    ))}
+                  <div>
+                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Día de Reunión</p>
+                    <div className="flex flex-wrap gap-2">
+                      {["Todos", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"].map((day) => (
+                        <button
+                          key={day}
+                          onClick={() => setFilterDay(day)}
+                          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${filterDay === day ? "bg-primary text-white shadow-md" : "bg-background/50 text-foreground hover:bg-border border border-border/30"
+                            }`}
+                        >
+                          {day}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="pt-2">
+                    <button
+                      onClick={() => {
+                        setShowFilters(false);
+                        if (filteredCells.length > 0) setViewMode("list");
+                      }}
+                      className="w-full py-3.5 bg-primary text-white text-sm font-bold rounded-2xl hover:bg-primary-dark transition-all shadow-lg active:scale-[0.98]"
+                    >
+                      Ver {filteredCells.length} células
+                    </button>
                   </div>
                 </div>
-
-                <div className="pt-2">
-                  <button
-                    onClick={() => {
-                      setShowFilters(false);
-                      if (filteredCells.length > 0) setViewMode("list");
-                    }}
-                    className="w-full py-3.5 bg-primary text-white text-sm font-bold rounded-2xl hover:bg-primary-dark transition-all shadow-lg active:scale-[0.98]"
-                  >
-                    Ver {filteredCells.length} células
-                  </button>
-                </div>
-              </div>
-            </Card>
+              </Card>
+            </>
           )}
 
           {isFiltered && (
@@ -167,6 +174,7 @@ export default function HomeClient() {
           <CellMap
             cells={filteredCells}
             onSelectCell={(cell) => setSelectedCell(cell)}
+            onMapClick={() => setSelectedCell(null)}
             selectedCellId={selectedCell?.id}
           />
         ) : (

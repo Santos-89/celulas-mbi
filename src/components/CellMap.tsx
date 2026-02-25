@@ -1,6 +1,6 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Popup, useMap, Tooltip } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap, Tooltip, useMapEvents } from "react-leaflet";
 import * as L from "leaflet";
 import { CellGroup } from "@/types";
 import { useEffect, useState, useCallback } from "react";
@@ -24,6 +24,7 @@ fixLeafletIcons();
 interface CellMapProps {
     cells: CellGroup[];
     onSelectCell: (cell: CellGroup) => void;
+    onMapClick: () => void;
     selectedCellId?: string | null;
 }
 
@@ -36,6 +37,15 @@ function ResizeMap() {
         );
         return () => timeouts.forEach(clearTimeout);
     }, [map]);
+    return null;
+}
+
+function MapClickHandler({ onClick }: { onClick: () => void }) {
+    useMapEvents({
+        click: () => {
+            onClick();
+        },
+    });
     return null;
 }
 
@@ -68,7 +78,7 @@ function LocationButton() {
     );
 }
 
-export default function CellMap({ cells, onSelectCell, selectedCellId }: CellMapProps) {
+export default function CellMap({ cells, onSelectCell, onMapClick, selectedCellId }: CellMapProps) {
     const [icons, setIcons] = useState<Record<string, any>>({});
     const defaultCenter: [number, number] = [-0.2820, -78.5276]; // Sur de Quito
 
@@ -110,6 +120,7 @@ export default function CellMap({ cells, onSelectCell, selectedCellId }: CellMap
                 zoomControl={false}
             >
                 <ResizeMap />
+                <MapClickHandler onClick={onMapClick} />
                 <LocationButton />
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
