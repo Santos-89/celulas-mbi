@@ -38,7 +38,7 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
     };
 
     return (
-        <Card className="fixed bottom-0 left-0 right-0 z-50 rounded-t-[3.5rem] animate-fluid md:max-w-md md:left-1/2 md:-translate-x-1/2 md:bottom-6 md:rounded-[3rem] shadow-premium bg-card/95 backdrop-blur-2xl border-t border-border/50 pb-8 md:pb-6">
+        <Card className="fixed bottom-0 left-0 right-0 z-50 rounded-t-[3.5rem] animate-fluid md:max-w-md md:left-1/2 md:-translate-x-1/2 md:bottom-32 md:rounded-[3rem] shadow-premium bg-card/95 backdrop-blur-2xl border-t border-border/50 pb-32 md:pb-8">
             <div className="w-12 h-1.5 bg-border/50 rounded-full mx-auto mb-6 md:hidden" />
 
             <div className="flex justify-between items-start mb-6">

@@ -209,7 +209,7 @@ export default function HomeClient() {
       </div>
 
       {/* Bottom Controls (Mobile) */}
-      <div className="absolute bottom-8 left-0 right-0 z-10 pointer-events-none flex justify-center px-6">
+      <div className="absolute bottom-8 left-0 right-0 z-[60] pointer-events-none flex justify-center px-6">
         <div className="bg-background/80 backdrop-blur-md p-1.5 rounded-2xl shadow-premium border border-border flex gap-1 pointer-events-auto">
           <button
             onClick={() => {
