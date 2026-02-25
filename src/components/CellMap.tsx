@@ -1,6 +1,6 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Popup, useMap, Tooltip, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap, Tooltip } from "react-leaflet";
 import * as L from "leaflet";
 import { CellGroup } from "@/types";
 import { useEffect, useState, useCallback } from "react";
@@ -38,14 +38,6 @@ function ResizeMap() {
     return null;
 }
 
-function ZoomTracker({ onZoomChange }: { onZoomChange: (zoom: number) => void }) {
-    const map = useMapEvents({
-        zoomend: () => {
-            onZoomChange(map.getZoom());
-        },
-    });
-    return null;
-}
 
 function LocationButton() {
     const map = useMap();
@@ -77,48 +69,35 @@ function LocationButton() {
 
 export default function CellMap({ cells, onSelectCell }: CellMapProps) {
     const [icons, setIcons] = useState<Record<string, any>>({});
-    const [zoom, setZoom] = useState(14);
     const defaultCenter: [number, number] = [-0.2820, -78.5276]; // Sur de Quito
 
     useEffect(() => {
         if (typeof window !== "undefined") {
-            const createIcon = (colorVar: string) => (L as any).divIcon({
+            const createIcon = (colorVar: string, emoji: string) => (L as any).divIcon({
                 className: "custom-div-icon",
                 html: `
-                    <div class="relative flex items-center justify-center w-full h-full">
-                        <div style="background-color: var(${colorVar});" class="w-4 h-4 rounded-full border-2 border-white shadow-premium z-10 transition-transform active:scale-90"></div>
+                    <div class="relative flex items-center justify-center w-6 h-6 animate-in zoom-in duration-300">
+                        <div style="background-color: var(${colorVar});" class="w-full h-full rounded-full border-2 border-white shadow-premium flex items-center justify-center text-[10px] transform transition-transform hover:scale-110 active:scale-95">
+                            ${emoji}
+                        </div>
+                        <div style="border-top-color: var(${colorVar});" class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] z-0"></div>
                     </div>
                 `,
                 iconSize: [24, 24],
-                iconAnchor: [12, 12],
+                iconAnchor: [12, 24],
             });
 
             setIcons({
-                "Adultos": createIcon("--color-adultos"),
-                "Jóvenes": createIcon("--color-jovenes"),
-                "Niños": createIcon("--color-ninos"),
-                "Online": createIcon("--color-online"),
-                "Default": createIcon("--foreground")
+                "Adultos": createIcon("--color-adultos", "🏠"),
+                "Jóvenes": createIcon("--color-jovenes", "🏃"),
+                "Niños": createIcon("--color-ninos", "👶"),
+                "Online": createIcon("--color-online", "🌐"),
+                "Default": createIcon("--foreground", "⛪")
             });
         }
     }, []);
 
-    const createClusterCustomIcon = (cluster: any) => {
-        const count = cluster.getChildCount();
-        return (L as any).divIcon({
-            html: `
-                <div class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-xs shadow-premium border-2 border-white ring-2 ring-primary/20 animate-in zoom-in duration-300">
-                    ${count}
-                </div>
-            `,
-            className: 'custom-marker-cluster',
-            iconSize: L.point(32, 32, true),
-        });
-    };
-
     if (Object.keys(icons).length === 0) return null;
-
-    const showLabels = zoom >= 15;
 
     return (
         <div className="w-full h-full rounded-b-[3.5rem] overflow-hidden shadow-premium z-0 relative border-b border-border/50">
@@ -130,7 +109,6 @@ export default function CellMap({ cells, onSelectCell }: CellMapProps) {
                 zoomControl={false}
             >
                 <ResizeMap />
-                <ZoomTracker onZoomChange={setZoom} />
                 <LocationButton />
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -151,22 +129,20 @@ export default function CellMap({ cells, onSelectCell }: CellMapProps) {
                                 click: () => onSelectCell(cell)
                             }}
                         >
-                            {showLabels && (
-                                <Tooltip
-                                    className="premium-tooltip !bg-card/90 !backdrop-blur-md !border-border/50 !shadow-premium !rounded-xl !p-2 opacity-100 transition-opacity duration-300"
-                                    direction="top"
-                                    offset={[0, -10]}
-                                    permanent
-                                >
-                                    <div className="text-center p-0.5">
-                                        <p className="font-bold text-primary text-[10px] leading-tight mb-0.5">{cell.leaderName}</p>
-                                        <div className="flex items-center justify-center gap-1">
-                                            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: `var(--color-${cell.type.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")})` }}></div>
-                                            <span className="text-[7px] uppercase font-heavy tracking-widest text-foreground/70">{cell.type}</span>
-                                        </div>
+                            <Tooltip
+                                className="premium-tooltip !bg-card/95 !backdrop-blur-md !border-border/50 !shadow-premium !rounded-2xl !px-3 !py-2"
+                                direction="top"
+                                offset={[0, -25]}
+                            >
+                                <div className="text-center min-w-[120px]">
+                                    <p className="font-bold text-foreground text-xs leading-tight mb-1">{cell.leaderName}</p>
+                                    <div className="flex items-center justify-center gap-1.5 py-0.5 px-2 bg-secondary/30 rounded-full">
+                                        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: `var(--color-${cell.type.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")})` }}></div>
+                                        <span className="text-[8px] uppercase font-heavy tracking-wider text-muted-foreground">{cell.type}</span>
                                     </div>
-                                </Tooltip>
-                            )}
+                                    <p className="text-[9px] text-muted-foreground mt-1.5 italic">Toca para más info</p>
+                                </div>
+                            </Tooltip>
                             <Popup className="premium-popup">
                                 <div className="text-center p-0.5">
                                     <p className="font-bold text-foreground text-sm leading-tight">{cell.leaderName}</p>
