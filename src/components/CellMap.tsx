@@ -87,17 +87,17 @@ export default function CellMap({ cells, onSelectCell, onMapClick, selectedCellI
             const createIcon = (colorVar: string, emoji: string) => (L as any).divIcon({
                 className: "custom-div-icon",
                 html: `
-                    <div class="relative flex items-center justify-center w-9 h-9 animate-in zoom-in duration-300 drop-shadow-md">
-                        <div style="background-color: var(${colorVar});" class="w-full h-full rounded-full border-2 border-white shadow-lg flex items-center justify-center transform transition-transform hover:scale-110 active:scale-95">
-                            <div class="w-6 h-6 bg-white rounded-full flex items-center justify-center text-[16px] shadow-inner">
+                    <div class="relative flex items-center justify-center w-6 h-6 animate-in zoom-in duration-300 drop-shadow-sm">
+                        <div style="background-color: var(${colorVar});" class="w-full h-full rounded-full border-2 border-white shadow-md flex items-center justify-center transform transition-transform hover:scale-110 active:scale-95">
+                            <div class="w-4 h-4 bg-white rounded-full flex items-center justify-center text-[11px] shadow-inner">
                                 ${emoji}
                             </div>
                         </div>
-                        <div style="border-top-color: var(${colorVar});" class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] z-0 drop-shadow-sm"></div>
+                        <div style="border-top-color: var(${colorVar});" class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[5px] z-0"></div>
                     </div>
                 `,
-                iconSize: [36, 44],
-                iconAnchor: [18, 44],
+                iconSize: [24, 24],
+                iconAnchor: [12, 24],
             });
 
             setIcons({
