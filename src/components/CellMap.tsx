@@ -7,6 +7,8 @@ import { CellGroup } from "@/types";
 import { useEffect, useState, useCallback } from "react";
 import { Navigation } from "lucide-react";
 import "leaflet/dist/leaflet.css";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
 // Fix for default marker icons in Leaflet with Next.js
 const fixLeafletIcons = () => {
@@ -137,21 +139,21 @@ export default function CellMap({ cells, onSelectCell }: CellMapProps) {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
+
                 <MarkerClusterGroup
                     chunkedLoading
                     iconCreateFunction={createClusterCustomIcon}
                     showCoverageOnHover={false}
-                    maxClusterRadius={40}
+                    maxClusterRadius={50}
+                    key={cells.length} // Force re-render if count changes
                 >
-                    {cells.map((cell, index) => {
-                        const jitterLat = (Math.sin(index * 13) * 0.0001);
-                        const jitterLng = (Math.cos(index * 13) * 0.0001);
+                    {cells.map((cell) => {
                         const cellIcon = icons[cell.type] || icons["Default"];
 
                         return (
                             <Marker
                                 key={cell.id}
-                                position={[cell.coordinates.lat + jitterLat, cell.coordinates.lng + jitterLng]}
+                                position={[cell.coordinates.lat, cell.coordinates.lng]}
                                 {...({ icon: cellIcon } as any)}
                                 eventHandlers={{
                                     click: () => onSelectCell(cell)
