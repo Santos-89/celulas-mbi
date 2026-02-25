@@ -2,13 +2,10 @@
 
 import { MapContainer, TileLayer, Marker, Popup, useMap, Tooltip, useMapEvents } from "react-leaflet";
 import * as L from "leaflet";
-import MarkerClusterGroup from "react-leaflet-cluster";
 import { CellGroup } from "@/types";
 import { useEffect, useState, useCallback } from "react";
 import { Navigation } from "lucide-react";
 import "leaflet/dist/leaflet.css";
-import "leaflet.markercluster/dist/MarkerCluster.css";
-import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
 // Fix for default marker icons in Leaflet with Next.js
 const fixLeafletIcons = () => {
@@ -140,55 +137,49 @@ export default function CellMap({ cells, onSelectCell }: CellMapProps) {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
 
-                <MarkerClusterGroup
-                    chunkedLoading
-                    iconCreateFunction={createClusterCustomIcon}
-                    showCoverageOnHover={false}
-                    maxClusterRadius={50}
-                    key={cells.length} // Force re-render if count changes
-                >
-                    {cells.map((cell) => {
-                        const cellIcon = icons[cell.type] || icons["Default"];
+                {cells.map((cell, index) => {
+                    const jitterLat = (Math.sin(index * 13) * 0.0001);
+                    const jitterLng = (Math.cos(index * 13) * 0.0001);
+                    const cellIcon = icons[cell.type] || icons["Default"];
 
-                        return (
-                            <Marker
-                                key={cell.id}
-                                position={[cell.coordinates.lat, cell.coordinates.lng]}
-                                {...({ icon: cellIcon } as any)}
-                                eventHandlers={{
-                                    click: () => onSelectCell(cell)
-                                }}
-                            >
-                                {showLabels && (
-                                    <Tooltip
-                                        className="premium-tooltip !bg-card/90 !backdrop-blur-md !border-border/50 !shadow-premium !rounded-xl !p-2 opacity-100 transition-opacity duration-300"
-                                        direction="top"
-                                        offset={[0, -10]}
-                                        permanent
-                                    >
-                                        <div className="text-center p-0.5">
-                                            <p className="font-bold text-primary text-[10px] leading-tight mb-0.5">{cell.leaderName}</p>
-                                            <div className="flex items-center justify-center gap-1">
-                                                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: `var(--color-${cell.type.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")})` }}></div>
-                                                <span className="text-[7px] uppercase font-heavy tracking-widest text-foreground/70">{cell.type}</span>
-                                            </div>
-                                        </div>
-                                    </Tooltip>
-                                )}
-                                <Popup className="premium-popup">
+                    return (
+                        <Marker
+                            key={cell.id}
+                            position={[cell.coordinates.lat + jitterLat, cell.coordinates.lng + jitterLng]}
+                            {...({ icon: cellIcon } as any)}
+                            eventHandlers={{
+                                click: () => onSelectCell(cell)
+                            }}
+                        >
+                            {showLabels && (
+                                <Tooltip
+                                    className="premium-tooltip !bg-card/90 !backdrop-blur-md !border-border/50 !shadow-premium !rounded-xl !p-2 opacity-100 transition-opacity duration-300"
+                                    direction="top"
+                                    offset={[0, -10]}
+                                    permanent
+                                >
                                     <div className="text-center p-0.5">
-                                        <p className="font-bold text-foreground text-sm leading-tight">{cell.leaderName}</p>
-                                        <p className="text-[10px] uppercase font-heavy tracking-wider mt-0.5"
-                                            style={{ color: `var(--color-${cell.type.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")})` }}>
-                                            {cell.type}
-                                        </p>
-                                        <p className="text-[10px] text-gray-500 mt-1 line-clamp-1">{cell.neighborhood}</p>
+                                        <p className="font-bold text-primary text-[10px] leading-tight mb-0.5">{cell.leaderName}</p>
+                                        <div className="flex items-center justify-center gap-1">
+                                            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: `var(--color-${cell.type.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")})` }}></div>
+                                            <span className="text-[7px] uppercase font-heavy tracking-widest text-foreground/70">{cell.type}</span>
+                                        </div>
                                     </div>
-                                </Popup>
-                            </Marker>
-                        );
-                    })}
-                </MarkerClusterGroup>
+                                </Tooltip>
+                            )}
+                            <Popup className="premium-popup">
+                                <div className="text-center p-0.5">
+                                    <p className="font-bold text-foreground text-sm leading-tight">{cell.leaderName}</p>
+                                    <p className="text-[10px] uppercase font-heavy tracking-wider mt-0.5"
+                                        style={{ color: `var(--color-${cell.type.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")})` }}>
+                                        {cell.type}
+                                    </p>
+                                    <p className="text-[10px] text-gray-500 mt-1 line-clamp-1">{cell.neighborhood}</p>
+                                </div>
+                            </Popup>
+                        </Marker>
+                    );
+                })}
             </MapContainer>
         </div>
     );
