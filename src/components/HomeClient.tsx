@@ -6,7 +6,7 @@ import { CellDetail } from "@/components/CellDetail";
 import { SAMPLE_CELLS } from "@/data/cells";
 import { CellGroup } from "@/types";
 import { fetchLiveCells } from "@/lib/data-fetcher";
-import { Search, SlidersHorizontal, Map as MapIcon, List as ListIcon, X, Loader2 } from "lucide-react";
+import { Search, SlidersHorizontal, Map as MapIcon, List as ListIcon, X, Loader2, RefreshCw } from "lucide-react";
 import { Badge, Card } from "@/components/ui/Card";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
@@ -25,16 +25,31 @@ export default function HomeClient() {
   const [filterType, setFilterType] = useState<string>("Todas");
   const [filterDay, setFilterDay] = useState<string>("Todos");
 
-  useEffect(() => {
-    async function initData() {
-      try {
-        const liveData = await fetchLiveCells();
-        setCells(liveData);
-      } catch (err) {
-        console.error("Could not load live data, using samples", err);
-      } finally {
-        setLoading(false);
+  const [lastSync, setLastSync] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const initData = async () => {
+    setIsRefreshing(true);
+    try {
+      const liveData = await fetchLiveCells();
+      setCells(liveData);
+      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      setLastSync(now);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("last_sync_time", now);
       }
+    } catch (err) {
+      console.error("Could not load live data", err);
+    } finally {
+      setLoading(false);
+      setIsRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedTime = localStorage.getItem("last_sync_time");
+      if (savedTime) setLastSync(savedTime);
     }
     initData();
   }, []);
@@ -78,6 +93,14 @@ export default function HomeClient() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             <div className="flex items-center gap-1.5 pr-1.5">
+              <button
+                onClick={() => initData()}
+                disabled={isRefreshing}
+                className={`p-2.5 rounded-2xl transition-all duration-300 ${isRefreshing ? "animate-spin text-primary" : "hover:bg-primary/10 text-primary"}`}
+                title="Sincronizar ahora"
+              >
+                <RefreshCw className="w-5 h-5" />
+              </button>
               <ThemeToggle />
               <button
                 onClick={() => setShowFilters(!showFilters)}
@@ -159,10 +182,19 @@ export default function HomeClient() {
             </button>
           )}
 
-          {loading && cells.length === 0 && (
-            <div className="flex items-center justify-center gap-2 py-2 text-primary animate-pulse">
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span className="text-xs font-bold uppercase tracking-widest">Sincronizando...</span>
+          {(loading || isRefreshing) && (
+            <div className="flex flex-col items-center justify-center gap-1 py-2 text-primary animate-in fade-in duration-500">
+              <div className="flex items-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span className="text-[10px] font-heavy uppercase tracking-[0.2em]">
+                  {loading ? "Cargando..." : "Sincronizando..."}
+                </span>
+              </div>
+              {lastSync && !loading && (
+                <span className="text-[8px] text-muted-foreground uppercase tracking-widest opacity-70">
+                  Última vez: {lastSync}
+                </span>
+              )}
             </div>
           )}
         </div>

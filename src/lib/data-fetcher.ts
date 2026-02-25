@@ -30,7 +30,7 @@ export async function fetchLiveCells(): Promise<CellGroup[]> {
 
             const id = (index + 1).toString();
             const leaderName = getField(row, ['LIDER', 'LÍDER', 'NOMBRE']) || 'Sin nombre';
-            const leaderPhone = String(getField(row, ['TELEFONO', 'TELÉFONO', 'CELULAR', 'PHONE']) || '');
+            const leaderPhone = String(getField(row, ['TELEFONO', 'TELÉFONO', 'CELULAR', 'PHONE', 'WHATSAPP', 'CONTACTO', 'NUMERO', 'NÚMERO', 'CONTACT']) || '');
             const type = getField(row, ['CELULA DE', 'TIPO', 'TIPO DE CELULA', 'TIPO DE CÉLULA']) || 'Adultos';
             const day = getField(row, ['DIA DE CELULA', 'DÍA DE CÉLULA', 'DIA', 'DÍA', 'DIA DE REUNIÓN']) || 'Martes';
             let time = getField(row, ['HORA', 'TIME', 'HORARIO']) || '7:00 PM';
