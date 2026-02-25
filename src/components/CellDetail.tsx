@@ -31,6 +31,12 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
         window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cell.address)}`, "_blank");
     };
 
+    const handleWhatsApp = () => {
+        if (whatsappData.isValid) {
+            window.location.href = whatsappData.url;
+        }
+    };
+
     return (
         <Card className="fixed bottom-0 left-0 right-0 z-50 rounded-t-[3.5rem] animate-fluid md:max-w-md md:left-1/2 md:-translate-x-1/2 md:bottom-6 md:rounded-[3rem] shadow-premium bg-card/95 backdrop-blur-2xl border-t border-border/50 pb-8 md:pb-6">
             <div className="w-12 h-1.5 bg-border/50 rounded-full mx-auto mb-6 md:hidden" />
@@ -79,19 +85,17 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
                 </Button>
 
                 {whatsappData.isValid ? (
-                    <a
-                        href={whatsappData.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold rounded-2xl shadow-lg shadow-green-500/20 h-14 transition-all active:scale-95"
+                    <button
+                        onClick={handleWhatsApp}
+                        className="flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold rounded-2xl shadow-lg shadow-green-500/20 h-14 transition-all active:scale-95 w-full"
                     >
                         <MessageCircle className="w-4.5 h-4.5" />
                         WhatsApp
-                    </a>
+                    </button>
                 ) : (
                     <Button
                         disabled
-                        className="gap-2.5 bg-gray-300 text-gray-500 font-bold rounded-2xl h-14"
+                        className="gap-2.5 bg-gray-300 text-gray-500 font-bold rounded-2xl h-14 w-full"
                     >
                         <MessageCircle className="w-4.5 h-4.5" />
                         WhatsApp
