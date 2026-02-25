@@ -24,6 +24,7 @@ fixLeafletIcons();
 interface CellMapProps {
     cells: CellGroup[];
     onSelectCell: (cell: CellGroup) => void;
+    selectedCellId?: string | null;
 }
 
 function ResizeMap() {
@@ -67,7 +68,7 @@ function LocationButton() {
     );
 }
 
-export default function CellMap({ cells, onSelectCell }: CellMapProps) {
+export default function CellMap({ cells, onSelectCell, selectedCellId }: CellMapProps) {
     const [icons, setIcons] = useState<Record<string, any>>({});
     const defaultCenter: [number, number] = [-0.2820, -78.5276]; // Sur de Quito
 
@@ -129,30 +130,22 @@ export default function CellMap({ cells, onSelectCell }: CellMapProps) {
                                 click: () => onSelectCell(cell)
                             }}
                         >
-                            <Tooltip
-                                className="premium-tooltip !bg-card/95 !backdrop-blur-md !border-border/50 !shadow-premium !rounded-2xl !px-3 !py-2"
-                                direction="top"
-                                offset={[0, -25]}
-                            >
-                                <div className="text-center min-w-[120px]">
-                                    <p className="font-bold text-foreground text-xs leading-tight mb-1">{cell.leaderName}</p>
-                                    <div className="flex items-center justify-center gap-1.5 py-0.5 px-2 bg-secondary/30 rounded-full">
-                                        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: `var(--color-${cell.type.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")})` }}></div>
-                                        <span className="text-[8px] uppercase font-heavy tracking-wider text-muted-foreground">{cell.type}</span>
+                            {selectedCellId !== cell.id && (
+                                <Tooltip
+                                    className="premium-tooltip !bg-card/95 !backdrop-blur-md !border-border/50 !shadow-premium !rounded-2xl !px-3 !py-2"
+                                    direction="top"
+                                    offset={[0, -25]}
+                                >
+                                    <div className="text-center min-w-[120px]">
+                                        <p className="font-bold text-foreground text-xs leading-tight mb-1">{cell.leaderName}</p>
+                                        <div className="flex items-center justify-center gap-1.5 py-0.5 px-2 bg-secondary/30 rounded-full">
+                                            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: `var(--color-${cell.type.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")})` }}></div>
+                                            <span className="text-[8px] uppercase font-heavy tracking-wider text-muted-foreground">{cell.type}</span>
+                                        </div>
+                                        <p className="text-[9px] text-muted-foreground mt-1.5 italic">Toca para más info</p>
                                     </div>
-                                    <p className="text-[9px] text-muted-foreground mt-1.5 italic">Toca para más info</p>
-                                </div>
-                            </Tooltip>
-                            <Popup className="premium-popup">
-                                <div className="text-center p-0.5">
-                                    <p className="font-bold text-foreground text-sm leading-tight">{cell.leaderName}</p>
-                                    <p className="text-[10px] uppercase font-heavy tracking-wider mt-0.5"
-                                        style={{ color: `var(--color-${cell.type.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")})` }}>
-                                        {cell.type}
-                                    </p>
-                                    <p className="text-[10px] text-gray-500 mt-1 line-clamp-1">{cell.neighborhood}</p>
-                                </div>
-                            </Popup>
+                                </Tooltip>
+                            )}
                         </Marker>
                     );
                 })}

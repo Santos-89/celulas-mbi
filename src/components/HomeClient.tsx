@@ -167,6 +167,7 @@ export default function HomeClient() {
           <CellMap
             cells={filteredCells}
             onSelectCell={(cell) => setSelectedCell(cell)}
+            selectedCellId={selectedCell?.id}
           />
         ) : (
           <div className="h-full pt-24 pb-8 px-4 overflow-y-auto bg-background">
