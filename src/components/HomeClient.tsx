@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { motion, AnimatePresence } from "framer-motion";
 import { CellDetail } from "@/components/CellDetail";
 import { SAMPLE_CELLS } from "@/data/cells";
 import { CellGroup } from "@/types";
@@ -9,6 +10,7 @@ import { fetchLiveCells } from "@/lib/data-fetcher";
 import { Search, SlidersHorizontal, Map as MapIcon, List as ListIcon, X, Loader2, RefreshCw, Navigation } from "lucide-react";
 import { Badge, Card } from "@/components/ui/Card";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 const CellMap = dynamic(() => import("@/components/CellMap"), {
   ssr: false,
@@ -86,7 +88,6 @@ export default function HomeClient({ initialData = SAMPLE_CELLS }: { initialData
       const savedTime = localStorage.getItem("last_sync_time");
       if (savedTime) setLastSync(savedTime);
     }
-    // No longer need to fetch on mount as we have initialData
   }, []);
 
   const filteredCells = useMemo(() => {
@@ -101,7 +102,6 @@ export default function HomeClient({ initialData = SAMPLE_CELLS }: { initialData
     });
 
     if (userLocation) {
-      // Sort by distance if user location is available
       return result.map(cell => ({
         ...cell,
         distance: calculateDistance(userLocation.lat, userLocation.lng, cell.coordinates.lat, cell.coordinates.lng)
@@ -125,7 +125,11 @@ export default function HomeClient({ initialData = SAMPLE_CELLS }: { initialData
       {/* Header / Search Bar */}
       <div className="fixed top-0 left-0 right-0 z-[100] p-4 md:p-6 bg-gradient-to-b from-background via-background/80 to-transparent mt-safe">
         <div className="flex flex-col gap-4 max-w-2xl mx-auto">
-          <div className="flex gap-2 items-center bg-card/95 backdrop-blur-2xl rounded-[2rem] p-2 shadow-premium border border-border">
+          <motion.div 
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="flex gap-2 items-center bg-card/95 backdrop-blur-2xl rounded-[2rem] p-2 shadow-premium border border-border"
+          >
             <div className="pl-4 text-primary">
               <Search className="w-5 h-5" />
             </div>
@@ -153,166 +157,213 @@ export default function HomeClient({ initialData = SAMPLE_CELLS }: { initialData
                 <SlidersHorizontal className="w-5 h-5" />
               </button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Filters Panel */}
-          {showFilters && (
-            <>
-              {/* Backdrop to close filters */}
-              <div
-                className="fixed inset-0 z-10"
-                onClick={() => setShowFilters(false)}
-              />
-              <Card className="animate-in fade-in slide-in-from-top-4 duration-300 bg-card/90 backdrop-blur-xl border-border/50 relative z-20">
-                <div className="space-y-5">
-                  <div>
-                    <div className="flex justify-between items-center mb-3">
-                      <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Tipo de Célula</p>
-                      {filterType !== "Todas" && <Badge variant={filterType.toLowerCase() as any} className="h-5">{filterType}</Badge>}
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {["Todas", "Niños", "Jóvenes", "Adultos", "Online"].map((type) => (
+          <AnimatePresence>
+            {showFilters && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 z-10"
+                  onClick={() => setShowFilters(false)}
+                />
+                <motion.div
+                  initial={{ y: -20, opacity: 0, scale: 0.95 }}
+                  animate={{ y: 0, opacity: 1, scale: 1 }}
+                  exit={{ y: -20, opacity: 0, scale: 0.95 }}
+                  transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                  className="relative z-20"
+                >
+                  <Card className="bg-card/90 backdrop-blur-xl border-border/50">
+                    <div className="space-y-5">
+                      <div>
+                        <div className="flex justify-between items-center mb-3">
+                          <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Tipo de Célula</p>
+                          {filterType !== "Todas" && <Badge variant={filterType.toLowerCase() as any} className="h-5">{filterType}</Badge>}
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {["Todas", "Niños", "Jóvenes", "Adultos", "Online"].map((type) => (
+                            <button
+                              key={type}
+                              onClick={() => setFilterType(type)}
+                              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${filterType === type ? "bg-primary text-white shadow-md" : "bg-background/50 text-foreground hover:bg-border border border-border/30"}`}
+                            >
+                              {type}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Día de Reunión</p>
+                        <div className="flex flex-wrap gap-2">
+                          {["Todos", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"].map((day) => (
+                            <button
+                              key={day}
+                              onClick={() => setFilterDay(day)}
+                              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${filterDay === day ? "bg-primary text-white shadow-md" : "bg-background/50 text-foreground hover:bg-border border border-border/30"}`}
+                            >
+                              {day}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Tu Ubicación</p>
                         <button
-                          key={type}
-                          onClick={() => setFilterType(type)}
-                          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${filterType === type ? "bg-primary text-white shadow-md" : "bg-background/50 text-foreground hover:bg-border border border-border/30"
-                            }`}
+                          onClick={requestLocation}
+                          disabled={isLocating}
+                          className={`w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-xs font-bold transition-all ${userLocation ? "bg-primary text-white shadow-md" : "bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20"}`}
                         >
-                          {type}
+                          <Navigation className={`w-4 h-4 ${isLocating ? "animate-pulse" : ""}`} />
+                          {isLocating ? "Buscando..." : userLocation ? "Ubicación activada (Cercanas primero)" : "Activar GPS para ver cercanas"}
                         </button>
-                      ))}
-                    </div>
-                  </div>
+                      </div>
 
-                  <div>
-                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Día de Reunión</p>
-                    <div className="flex flex-wrap gap-2">
-                      {["Todos", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"].map((day) => (
+                      <div className="pt-2">
                         <button
-                          key={day}
-                          onClick={() => setFilterDay(day)}
-                          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${filterDay === day ? "bg-primary text-white shadow-md" : "bg-background/50 text-foreground hover:bg-border border border-border/30"
-                            }`}
+                          onClick={() => {
+                            setShowFilters(false);
+                            if (filteredCells.length > 0) setViewMode("list");
+                          }}
+                          className="w-full py-3.5 bg-primary text-white text-sm font-bold rounded-2xl hover:bg-primary-dark transition-all shadow-lg active:scale-[0.98]"
                         >
-                          {day}
+                          Ver {filteredCells.length} células
                         </button>
-                      ))}
+                      </div>
                     </div>
-                  </div>
-
-                  <div>
-                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Tu Ubicación</p>
-                    <button
-                      onClick={requestLocation}
-                      disabled={isLocating}
-                      className={`w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-xs font-bold transition-all ${userLocation ? "bg-primary text-white shadow-md" : "bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20"}`}
-                    >
-                      <Navigation className={`w-4 h-4 ${isLocating ? "animate-pulse" : ""}`} />
-                      {isLocating ? "Buscando..." : userLocation ? "Ubicación activada (Cercanas primero)" : "Activar GPS para ver cercanas"}
-                    </button>
-                  </div>
-
-                  <div className="pt-2">
-                    <button
-                      onClick={() => {
-                        setShowFilters(false);
-                        if (filteredCells.length > 0) setViewMode("list");
-                      }}
-                      className="w-full py-3.5 bg-primary text-white text-sm font-bold rounded-2xl hover:bg-primary-dark transition-all shadow-lg active:scale-[0.98]"
-                    >
-                      Ver {filteredCells.length} células
-                    </button>
-                  </div>
-                </div>
-              </Card>
-            </>
-          )}
+                  </Card>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
 
           {isFiltered && (
-            <button
+            <motion.button
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
               onClick={clearFilters}
-              className="flex items-center gap-1.5 px-5 py-2 bg-card/80 backdrop-blur-md border border-border/50 rounded-full text-[10px] font-heavy tracking-widest uppercase text-foreground shadow-premium hover:bg-border transition-all self-center animate-in zoom-in-95 duration-200"
+              className="flex items-center gap-1.5 px-5 py-2 bg-card/80 backdrop-blur-md border border-border/50 rounded-full text-[10px] font-heavy tracking-widest uppercase text-foreground shadow-premium hover:bg-border transition-all self-center"
             >
               <X className="w-3.5 h-3.5" />
               Limpiar Filtros
-            </button>
-          )}
-
-          {(loading || isRefreshing) && (
-            <div className="flex flex-col items-center justify-center gap-1 py-2 text-primary animate-in fade-in duration-500">
-              <div className="flex items-center gap-2">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                <span className="text-[10px] font-heavy uppercase tracking-[0.2em]">
-                  {loading ? "Cargando..." : "Sincronizando..."}
-                </span>
-              </div>
-              {lastSync && !loading && (
-                <span className="text-[8px] text-muted-foreground uppercase tracking-widest opacity-70">
-                  Última vez: {lastSync}
-                </span>
-              )}
-            </div>
+            </motion.button>
           )}
         </div>
       </div>
 
       {/* Main Content Area */}
       <div className="flex-1 relative overflow-hidden">
-        {viewMode === "map" ? (
-          <CellMap
-            cells={filteredCells}
-            onSelectCell={(cell) => setSelectedCell(cell)}
-            onMapClick={() => setSelectedCell(null)}
-            selectedCellId={selectedCell?.id}
-          />
-        ) : (
-          <div className="h-full pt-24 pb-8 px-4 overflow-y-auto bg-background">
-            <div className="max-w-2xl mx-auto space-y-3">
-              <h1 className="text-lg font-heavy text-foreground px-2 mb-4 animate-fluid">
-                Células encontradas ({filteredCells.length})
-              </h1>
-              {filteredCells.map((cell) => (
-                <Card
-                  key={cell.id}
-                  onClick={() => setSelectedCell(cell)}
-                  className="p-4 cursor-pointer hover:border-primary/30 transition-all border-none shadow-md bg-card"
-                >
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="font-bold text-foreground">{cell.leaderName}</h3>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Badge variant={cell.type === "Niños" ? "niños" : cell.type === "Jóvenes" ? "jóvenes" : cell.type === "Online" ? "online" : "adultos"}>
-                          {cell.type}
-                        </Badge>
-                        <span className="text-xs text-gray-500 uppercase">{cell.day} • {cell.time}</span>
-                      </div>
-                      <p className="text-xs text-gray-400 mt-2 font-medium">{cell.neighborhood}</p>
-                    </div>
-                    {cell.distance !== undefined && (
-                      <div className="flex flex-col items-end gap-1">
-                        <div className="px-2 py-1 bg-primary/10 rounded-lg text-[10px] font-bold text-primary">
-                          {cell.distance.toFixed(1)} km
+        <AnimatePresence mode="wait">
+          {viewMode === "map" ? (
+            <motion.div
+              key="map-view"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              className="w-full h-full"
+            >
+              <CellMap
+                cells={filteredCells}
+                onSelectCell={(cell) => setSelectedCell(cell)}
+                onMapClick={() => setSelectedCell(null)}
+                selectedCellId={selectedCell?.id}
+              />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="list-view"
+              initial={{ x: 30, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: -30, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="h-full pt-24 pb-8 px-4 overflow-y-auto bg-background"
+            >
+              <div className="max-w-2xl mx-auto space-y-3">
+                <h1 className="text-lg font-heavy text-foreground px-2 mb-4">
+                  Células encontradas ({filteredCells.length})
+                </h1>
+                
+                {isRefreshing ? (
+                  // Skeleton list
+                  Array.from({ length: 5 }).map((_, i) => (
+                    <Card key={`skeleton-${i}`} className="p-4 border-none shadow-md bg-card space-y-3">
+                      <div className="flex justify-between items-start">
+                        <div className="space-y-2 flex-1">
+                          <Skeleton className="h-5 w-1/3" />
+                          <div className="flex gap-2">
+                            <Skeleton className="h-4 w-16 rounded-full" />
+                            <Skeleton className="h-4 w-24" />
+                          </div>
+                          <Skeleton className="h-3 w-1/2 mt-2" />
                         </div>
-                        <span className="text-[8px] text-muted-foreground uppercase tracking-widest">de ti</span>
+                        <Skeleton className="h-8 w-12 rounded-lg" />
                       </div>
-                    )}
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </div>
-        )}
+                    </Card>
+                  ))
+                ) : (
+                  filteredCells.map((cell) => (
+                    <motion.div
+                      layout
+                      key={cell.id}
+                      initial={{ scale: 0.95, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <Card
+                        onClick={() => setSelectedCell(cell)}
+                        className="p-4 cursor-pointer hover:border-primary/30 transition-all border-none shadow-md bg-card"
+                      >
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="font-bold text-foreground">{cell.leaderName}</h3>
+                            <div className="flex items-center gap-2 mt-1">
+                              <Badge variant={cell.type === "Niños" ? "niños" : cell.type === "Jóvenes" ? "jóvenes" : cell.type === "Online" ? "online" : "adultos"}>
+                                {cell.type}
+                              </Badge>
+                              <span className="text-xs text-gray-500 uppercase">{cell.day} • {cell.time}</span>
+                            </div>
+                            <p className="text-xs text-gray-400 mt-2 font-medium">{cell.neighborhood}</p>
+                          </div>
+                          {cell.distance !== undefined && (
+                            <div className="flex flex-col items-end gap-1">
+                              <div className="px-2 py-1 bg-primary/10 rounded-lg text-[10px] font-bold text-primary">
+                                {cell.distance.toFixed(1)} km
+                              </div>
+                              <span className="text-[8px] text-muted-foreground uppercase tracking-widest">de ti</span>
+                            </div>
+                          )}
+                        </div>
+                      </Card>
+                    </motion.div>
+                  ))
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Bottom Controls (Mobile) */}
       <div className="absolute bottom-8 left-0 right-0 z-[60] pointer-events-none flex justify-center px-6">
-        <div className="bg-background/80 backdrop-blur-md p-1.5 rounded-2xl shadow-premium border border-border flex gap-1 pointer-events-auto">
+        <motion.div 
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ type: "spring", damping: 30, stiffness: 200, delay: 0.2 }}
+          className="bg-background/80 backdrop-blur-md p-1.5 rounded-2xl shadow-premium border border-border flex gap-1 pointer-events-auto"
+        >
           <button
             onClick={() => {
               setViewMode("map");
               setSelectedCell(null);
             }}
-            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${viewMode === "map" ? "bg-primary text-white shadow-lg" : "text-foreground hover:bg-border"}`}
+            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${viewMode === "map" ? "bg-primary text-white shadow-lg" : "text-foreground hover:bg-border"}`}
           >
             <MapIcon className="w-4 h-4" />
             Mapa
@@ -322,21 +373,33 @@ export default function HomeClient({ initialData = SAMPLE_CELLS }: { initialData
               setViewMode("list");
               setSelectedCell(null);
             }}
-            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${viewMode === "list" ? "bg-primary text-white shadow-lg" : "text-foreground hover:bg-border"}`}
+            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${viewMode === "list" ? "bg-primary text-white shadow-lg" : "text-foreground hover:bg-border"}`}
           >
             <ListIcon className="w-4 h-4" />
             Lista
           </button>
-        </div>
+        </motion.div>
       </div>
 
       {/* Detail Panel */}
-      {selectedCell && (
-        <CellDetail
-          cell={selectedCell}
-          onClose={() => setSelectedCell(null)}
-        />
-      )}
+      <AnimatePresence>
+        {selectedCell && (
+          <motion.div
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{ type: "spring", damping: 40, stiffness: 400 }}
+            className="fixed inset-0 z-[200] pointer-events-none"
+          >
+            <div className="pointer-events-auto h-full">
+              <CellDetail
+                cell={selectedCell}
+                onClose={() => setSelectedCell(null)}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
