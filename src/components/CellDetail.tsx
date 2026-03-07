@@ -63,6 +63,11 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
                     <Badge variant={cell.type.toLowerCase() as any} className="py-1.5 px-4 rounded-xl">
                         {cell.type}
                     </Badge>
+                    {cell.distance !== undefined && (
+                        <div className="px-3 py-1 bg-primary/10 rounded-lg text-[10px] font-bold text-primary">
+                            A {cell.distance.toFixed(1)} km de ti
+                        </div>
+                    )}
                     <div className="flex items-center gap-2 text-gray-500 text-xs font-bold">
                         <Clock className="w-4 h-4 text-primary" />
                         <span>{cell.day} {cell.time}</span>

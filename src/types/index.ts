@@ -11,6 +11,7 @@ export interface CellGroup {
         lat: number;
         lng: number;
     };
+    distance?: number;
 }
 
 export const CELL_TYPES = ["Niños", "Jóvenes", "Adultos", "Online"] as const;

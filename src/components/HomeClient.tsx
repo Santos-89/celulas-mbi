@@ -6,7 +6,7 @@ import { CellDetail } from "@/components/CellDetail";
 import { SAMPLE_CELLS } from "@/data/cells";
 import { CellGroup } from "@/types";
 import { fetchLiveCells } from "@/lib/data-fetcher";
-import { Search, SlidersHorizontal, Map as MapIcon, List as ListIcon, X, Loader2, RefreshCw } from "lucide-react";
+import { Search, SlidersHorizontal, Map as MapIcon, List as ListIcon, X, Loader2, RefreshCw, Navigation } from "lucide-react";
 import { Badge, Card } from "@/components/ui/Card";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
@@ -27,6 +27,42 @@ export default function HomeClient() {
 
   const [lastSync, setLastSync] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [isLocating, setIsLocating] = useState(false);
+
+  // Haversine formula to calculate distance in km
+  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+    const R = 6371; // Earth's radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  };
+
+  const requestLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Tu navegador no soporta geolocalización");
+      return;
+    }
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setUserLocation({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude
+        });
+        setIsLocating(false);
+      },
+      () => {
+        alert("No se pudo obtener tu ubicación. Asegúrate de dar permisos.");
+        setIsLocating(false);
+      }
+    );
+  };
 
   const initData = async () => {
     setIsRefreshing(true);
@@ -55,25 +91,34 @@ export default function HomeClient() {
   }, []);
 
   const filteredCells = useMemo(() => {
-    return cells
-      .filter((cell) => {
-        const matchesSearch =
-          cell.leaderName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          cell.neighborhood.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          cell.address.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesType = filterType === "Todas" || cell.type === filterType;
-        const matchesDay = filterDay === "Todos" || cell.day === filterDay;
-        return matchesSearch && matchesType && matchesDay;
-      })
-      .sort((a, b) => a.leaderName.localeCompare(b.leaderName));
-  }, [cells, searchQuery, filterType, filterDay]);
+    let result = cells.filter((cell) => {
+      const matchesSearch =
+        cell.leaderName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        cell.neighborhood.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        cell.address.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesType = filterType === "Todas" || cell.type === filterType;
+      const matchesDay = filterDay === "Todos" || cell.day === filterDay;
+      return matchesSearch && matchesType && matchesDay;
+    });
 
-  const isFiltered = searchQuery !== "" || filterType !== "Todas" || filterDay !== "Todos";
+    if (userLocation) {
+      // Sort by distance if user location is available
+      return result.map(cell => ({
+        ...cell,
+        distance: calculateDistance(userLocation.lat, userLocation.lng, cell.coordinates.lat, cell.coordinates.lng)
+      })).sort((a, b) => (a.distance || 0) - (b.distance || 0));
+    }
+
+    return result.sort((a, b) => a.leaderName.localeCompare(b.leaderName));
+  }, [cells, searchQuery, filterType, filterDay, userLocation]);
+
+  const isFiltered = searchQuery !== "" || filterType !== "Todas" || filterDay !== "Todos" || userLocation !== null;
 
   const clearFilters = () => {
     setFilterType("Todas");
     setFilterDay("Todos");
     setSearchQuery("");
+    setUserLocation(null);
   };
 
   return (
@@ -156,6 +201,18 @@ export default function HomeClient() {
                     </div>
                   </div>
 
+                  <div>
+                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Tu Ubicación</p>
+                    <button
+                      onClick={requestLocation}
+                      disabled={isLocating}
+                      className={`w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-xs font-bold transition-all ${userLocation ? "bg-primary text-white shadow-md" : "bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20"}`}
+                    >
+                      <Navigation className={`w-4 h-4 ${isLocating ? "animate-pulse" : ""}`} />
+                      {isLocating ? "Buscando..." : userLocation ? "Ubicación activada (Cercanas primero)" : "Activar GPS para ver cercanas"}
+                    </button>
+                  </div>
+
                   <div className="pt-2">
                     <button
                       onClick={() => {
@@ -232,6 +289,14 @@ export default function HomeClient() {
                       </div>
                       <p className="text-xs text-gray-400 mt-2 font-medium">{cell.neighborhood}</p>
                     </div>
+                    {cell.distance !== undefined && (
+                      <div className="flex flex-col items-end gap-1">
+                        <div className="px-2 py-1 bg-primary/10 rounded-lg text-[10px] font-bold text-primary">
+                          {cell.distance.toFixed(1)} km
+                        </div>
+                        <span className="text-[8px] text-muted-foreground uppercase tracking-widest">de ti</span>
+                      </div>
+                    )}
                   </div>
                 </Card>
               ))}
