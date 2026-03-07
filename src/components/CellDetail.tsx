@@ -17,9 +17,13 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
             cleanNumber = cleanNumber.substring(1);
         }
         const fullNumber = cleanNumber.startsWith("593") ? cleanNumber : `593${cleanNumber}`;
-        const message = encodeURIComponent(`¡Hola ${cell.leaderName}! Vi tu célula en la app de la iglesia y me gustaría asistir. ¿Me puedes ayudar con más información por favor?`);
+        
+        const chatMessage = encodeURIComponent(`¡Hola ${cell.leaderName}! Vi tu célula en la app de la iglesia y me gustaría asistir. ¿Me puedes ayudar con más información por favor?`);
+        const callRequestMessage = encodeURIComponent(`¡Hola ${cell.leaderName}! Me gustaría tener una llamada de WhatsApp contigo para saber más de la célula. ¿Podrías atenderme?`);
+        
         return {
-            url: `https://wa.me/${fullNumber}?text=${message}`,
+            chatUrl: `https://wa.me/${fullNumber}?text=${chatMessage}`,
+            callUrl: `https://wa.me/${fullNumber}?text=${callRequestMessage}`,
             isValid: cleanNumber.length >= 7
         };
     }, [cell]);
@@ -36,7 +40,13 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
 
     const handleWhatsApp = () => {
         if (whatsappData.isValid) {
-            window.location.href = whatsappData.url;
+            window.location.href = whatsappData.chatUrl;
+        }
+    };
+
+    const handleWhatsAppCall = () => {
+        if (whatsappData.isValid) {
+            window.location.href = whatsappData.callUrl;
         }
     };
 
@@ -118,7 +128,7 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
                 {whatsappData.isValid ? (
                     <motion.div whileTap={{ scale: 0.95 }} className="w-full">
                         <button
-                            onClick={handleWhatsApp}
+                            onClick={handleWhatsAppCall}
                             className="flex flex-col items-center justify-center gap-1.5 bg-[#25D366] text-white font-bold rounded-3xl shadow-lg shadow-green-500/20 h-24 w-full transition-all"
                         >
                             <div className="p-2.5 bg-white/20 rounded-xl relative">
