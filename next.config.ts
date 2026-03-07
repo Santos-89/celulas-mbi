@@ -9,8 +9,10 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true, // Para que las imágenes de Google no den problemas
+    unoptimized: true,
   },
+  // Cloudflare compatibility: assegurar que el runtime sea compatible si es necesario
+  // Para Next.js en Cloudflare, a veces se prefiere 'edge' para ciertas rutas
 };
 
 export default nextConfig;

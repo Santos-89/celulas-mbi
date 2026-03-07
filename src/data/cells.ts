@@ -235,8 +235,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Santa Rita, Urbanización Caminos del Sur",
     "neighborhood": "Santa Rita, Urbanización Caminos del Sur",
     "coordinates": {
-      "lat": -27.209600000000002,
-      "lng": -78.55431999999999
+      "lat": -0.272096,
+      "lng": -78.55432
     }
   },
   {
@@ -347,8 +347,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Urbanización Caminos del Sur",
     "neighborhood": "Urbanización Caminos del Sur",
     "coordinates": {
-      "lat": -27.209600000000002,
-      "lng": -78.55431999999999
+      "lat": -0.272096,
+      "lng": -78.55432
     }
   },
   {
@@ -431,8 +431,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Chillogallo, El Tránsito - Isabel Herreria y Calle B OE13B-160",
     "neighborhood": "Chillogallo, El Tránsito - Isabel Herreria y Calle B OE13B-160",
     "coordinates": {
-      "lat": -0.2775,
-      "lng": -78.575
+      "lat": -0.282713,
+      "lng": -78.570569
     }
   },
   {
@@ -459,8 +459,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Chillogallo, El Tránsito - Isabel Herreria y Calle B OE13B-160",
     "neighborhood": "Chillogallo, El Tránsito - Isabel Herreria y Calle B OE13B-160",
     "coordinates": {
-      "lat": -28.255599999999998,
-      "lng": -78.570503
+      "lat": -0.282713,
+      "lng": -78.570569
     }
   },
   {
@@ -487,8 +487,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Chillogallo, El Tránsito - Isabel Herreria y Calle B OE13B-160",
     "neighborhood": "Chillogallo, El Tránsito - Isabel Herreria y Calle B OE13B-160",
     "coordinates": {
-      "lat": -0.2775,
-      "lng": -78.575
+      "lat": -0.282713,
+      "lng": -78.570569
     }
   },
   {
@@ -515,8 +515,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Mena 2",
     "neighborhood": "Mena 2",
     "coordinates": {
-      "lat": -27.7847826483679,
-      "lng": -78.5363455048755
+      "lat": -0.282,
+      "lng": -78.5276
     }
   },
   {
@@ -907,8 +907,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Chillogallo, El Tránsito - Isabel Herreria y Calle B OE13B-160",
     "neighborhood": "Chillogallo, El Tránsito - Isabel Herreria y Calle B OE13B-160",
     "coordinates": {
-      "lat": -28.272799999999997,
-      "lng": -78.570579
+      "lat": -0.282713,
+      "lng": -78.570569
     }
   },
   {
@@ -921,8 +921,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Chillogallo, El Tránsito - S34K OE13-235 LT 68",
     "neighborhood": "Chillogallo, El Tránsito - S34K OE13-235 LT 68",
     "coordinates": {
-      "lat": -28.255599999999998,
-      "lng": -78.570503
+      "lat": -0.282787,
+      "lng": -78.571513
     }
   },
   {
@@ -935,8 +935,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Santa Rita, Urbanización Caminos del Sur",
     "neighborhood": "Santa Rita, Urbanización Caminos del Sur",
     "coordinates": {
-      "lat": -27.209600000000002,
-      "lng": -78.55431999999999
+      "lat": -0.272096,
+      "lng": -78.55432
     }
   },
   {
@@ -949,8 +949,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Parqueaderos AKA - Iglesia Central",
     "neighborhood": "Parqueaderos AKA - Iglesia Central",
     "coordinates": {
-      "lat": -27.7847826483679,
-      "lng": -78.5363455048755
+      "lat": -0.27771,
+      "lng": -78.53631
     }
   },
   {
@@ -963,8 +963,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Parqueaderos AKA - Iglesia Central",
     "neighborhood": "Parqueaderos AKA - Iglesia Central",
     "coordinates": {
-      "lat": -27.7847826483679,
-      "lng": -78.5363455048755
+      "lat": -0.27771,
+      "lng": -78.53631
     }
   },
   {
@@ -977,8 +977,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Parqueaderos AKA - Iglesia Central",
     "neighborhood": "Parqueaderos AKA - Iglesia Central",
     "coordinates": {
-      "lat": -27.7847826483679,
-      "lng": -78.5363455048755
+      "lat": -0.27771,
+      "lng": -78.53631
     }
   },
   {
@@ -991,8 +991,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Parqueaderos AKA - Iglesia Central",
     "neighborhood": "Parqueaderos AKA - Iglesia Central",
     "coordinates": {
-      "lat": -27.7847826483679,
-      "lng": -78.5363455048755
+      "lat": -0.27771,
+      "lng": -78.53631
     }
   },
   {

@@ -7,7 +7,8 @@
     "build": "node import-excel.mjs && next build",
     "start": "next start",
     "lint": "eslint",
-    "sync-data": "node import-excel.mjs"
+    "sync-data": "node import-excel.mjs",
+    "cf-pages:build": "npx @cloudflare/next-on-pages"
   },
   "dependencies": {
     "@fontsource/plus-jakarta-sans": "^5.2.8",
@@ -24,6 +25,7 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.16",
     "@tailwindcss/postcss": "^4",
     "@types/leaflet.markercluster": "^1.5.6",
     "@types/node": "^20",
