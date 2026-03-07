@@ -1,7 +1,6 @@
 import { useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { CellGroup } from "@/types";
-import { Button } from "./ui/Button";
 import { Badge, Card } from "./ui/Card";
 import { Phone, MessageCircle, Navigation, Clock, MapPin, X } from "lucide-react";
 
@@ -50,10 +49,10 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={onClose}
-                className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
+                className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[150] pointer-events-auto"
             />
             
-            <Card className="fixed bottom-0 left-0 right-0 z-50 rounded-t-[3.5rem] md:max-w-md md:left-1/2 md:-translate-x-1/2 md:bottom-32 md:rounded-[3rem] shadow-premium bg-card/95 backdrop-blur-2xl border-t border-border/50 pb-32 md:pb-8 h-auto max-h-[90vh] overflow-y-auto">
+            <Card className="fixed bottom-0 left-0 right-0 z-[200] rounded-t-[3.5rem] md:max-w-md md:left-1/2 md:-translate-x-1/2 md:bottom-32 md:rounded-[3rem] shadow-premium bg-card/95 backdrop-blur-2xl border-t border-border/50 pb-32 md:pb-8 h-auto max-h-[90vh] overflow-y-auto pointer-events-auto">
                 <div className="w-12 h-1.5 bg-border/50 rounded-full mx-auto mb-6 md:hidden sticky top-0" />
 
                 <div className="flex justify-between items-start mb-6 px-2">
@@ -109,6 +108,12 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
                     >
                         <div className="p-2 bg-primary/10 rounded-2xl shrink-0 mt-0.5">
                             <MapPin className="w-5 h-5 text-primary" />
+                        </div>
+                        <div className="min-w-0">
+                            <p className="font-bold text-foreground leading-snug uppercase tracking-tight">{cell.neighborhood}</p>
+                            {cell.address.trim().toLowerCase() !== cell.neighborhood.trim().toLowerCase() && (
+                                <p className="text-xs text-gray-400 mt-1 font-normal">{cell.address}</p>
+                            )}
                         </div>
                     </motion.div>
                 </div>
