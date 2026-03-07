@@ -235,8 +235,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Santa Rita, Urbanización Caminos del Sur",
     "neighborhood": "Santa Rita, Urbanización Caminos del Sur",
     "coordinates": {
-      "lat": -0.2721,
-      "lng": -78.5445
+      "lat": -27.209600000000002,
+      "lng": -78.55431999999999
     }
   },
   {
@@ -326,7 +326,7 @@ export const SAMPLE_CELLS: CellGroup[] = [
   {
     "id": "24",
     "leaderName": "Sonia Amaya ",
-    "leaderPhone": "",
+    "leaderPhone": "098 335 7164",
     "type": "Adultos",
     "day": "Viernes",
     "time": "7:00 PM",
@@ -347,8 +347,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Urbanización Caminos del Sur",
     "neighborhood": "Urbanización Caminos del Sur",
     "coordinates": {
-      "lat": -0.282,
-      "lng": -78.5276
+      "lat": -27.209600000000002,
+      "lng": -78.55431999999999
     }
   },
   {
@@ -459,14 +459,14 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Chillogallo, El Tránsito - Isabel Herreria y Calle B OE13B-160",
     "neighborhood": "Chillogallo, El Tránsito - Isabel Herreria y Calle B OE13B-160",
     "coordinates": {
-      "lat": -0.2775,
-      "lng": -78.575
+      "lat": -28.255599999999998,
+      "lng": -78.570503
     }
   },
   {
     "id": "34",
     "leaderName": "Martha Gómez",
-    "leaderPhone": "",
+    "leaderPhone": "098 475 5620",
     "type": "Niños",
     "day": "Viernes",
     "time": "7:30 PM",
@@ -515,8 +515,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Mena 2",
     "neighborhood": "Mena 2",
     "coordinates": {
-      "lat": -0.282,
-      "lng": -78.5276
+      "lat": -27.7847826483679,
+      "lng": -78.5363455048755
     }
   },
   {
@@ -620,7 +620,7 @@ export const SAMPLE_CELLS: CellGroup[] = [
   {
     "id": "45",
     "leaderName": "David Pachano",
-    "leaderPhone": "",
+    "leaderPhone": "098 718 8139",
     "type": "Adultos",
     "day": "Martes",
     "time": "7:00 PM",
@@ -634,7 +634,7 @@ export const SAMPLE_CELLS: CellGroup[] = [
   {
     "id": "46",
     "leaderName": "David Pachano",
-    "leaderPhone": "",
+    "leaderPhone": "098 718 8139",
     "type": "Adultos",
     "day": "Miércoles",
     "time": "7:00 PM",
@@ -648,7 +648,7 @@ export const SAMPLE_CELLS: CellGroup[] = [
   {
     "id": "47",
     "leaderName": "Mairexys Pachano",
-    "leaderPhone": "",
+    "leaderPhone": "097 877 2687",
     "type": "Adultos",
     "day": "Miércoles",
     "time": "6:00 PM",
@@ -718,7 +718,7 @@ export const SAMPLE_CELLS: CellGroup[] = [
   {
     "id": "52",
     "leaderName": "Tatiana Granella",
-    "leaderPhone": "",
+    "leaderPhone": "099 773 3376",
     "type": "Adultos",
     "day": "Martes",
     "time": "6:30 PM",
@@ -844,7 +844,7 @@ export const SAMPLE_CELLS: CellGroup[] = [
   {
     "id": "61",
     "leaderName": "Ailyn Villaroel ",
-    "leaderPhone": "",
+    "leaderPhone": "096 022 7747",
     "type": "Jóvenes",
     "day": "Viernes",
     "time": "7:00 PM",
@@ -872,7 +872,7 @@ export const SAMPLE_CELLS: CellGroup[] = [
   {
     "id": "63",
     "leaderName": "Mónica Neira",
-    "leaderPhone": "",
+    "leaderPhone": "099 913 5022",
     "type": "Adultos",
     "day": "Viernes",
     "time": "7:00 PM",
@@ -886,7 +886,7 @@ export const SAMPLE_CELLS: CellGroup[] = [
   {
     "id": "64",
     "leaderName": "Mónica Neira",
-    "leaderPhone": "",
+    "leaderPhone": "099 913 5022",
     "type": "Adultos",
     "day": "Sábado",
     "time": "7:00 PM",
@@ -907,8 +907,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Chillogallo, El Tránsito - Isabel Herreria y Calle B OE13B-160",
     "neighborhood": "Chillogallo, El Tránsito - Isabel Herreria y Calle B OE13B-160",
     "coordinates": {
-      "lat": -0.2775,
-      "lng": -78.575
+      "lat": -28.272799999999997,
+      "lng": -78.570579
     }
   },
   {
@@ -921,8 +921,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Chillogallo, El Tránsito - S34K OE13-235 LT 68",
     "neighborhood": "Chillogallo, El Tránsito - S34K OE13-235 LT 68",
     "coordinates": {
-      "lat": -0.2775,
-      "lng": -78.575
+      "lat": -28.255599999999998,
+      "lng": -78.570503
     }
   },
   {
@@ -935,8 +935,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Santa Rita, Urbanización Caminos del Sur",
     "neighborhood": "Santa Rita, Urbanización Caminos del Sur",
     "coordinates": {
-      "lat": -0.2721,
-      "lng": -78.5445
+      "lat": -27.209600000000002,
+      "lng": -78.55431999999999
     }
   },
   {
@@ -949,8 +949,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Parqueaderos AKA - Iglesia Central",
     "neighborhood": "Parqueaderos AKA - Iglesia Central",
     "coordinates": {
-      "lat": -0.282,
-      "lng": -78.5276
+      "lat": -27.7847826483679,
+      "lng": -78.5363455048755
     }
   },
   {
@@ -963,8 +963,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Parqueaderos AKA - Iglesia Central",
     "neighborhood": "Parqueaderos AKA - Iglesia Central",
     "coordinates": {
-      "lat": -0.282,
-      "lng": -78.5276
+      "lat": -27.7847826483679,
+      "lng": -78.5363455048755
     }
   },
   {
@@ -977,8 +977,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Parqueaderos AKA - Iglesia Central",
     "neighborhood": "Parqueaderos AKA - Iglesia Central",
     "coordinates": {
-      "lat": -0.282,
-      "lng": -78.5276
+      "lat": -27.7847826483679,
+      "lng": -78.5363455048755
     }
   },
   {
@@ -991,8 +991,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "address": "Parqueaderos AKA - Iglesia Central",
     "neighborhood": "Parqueaderos AKA - Iglesia Central",
     "coordinates": {
-      "lat": -0.282,
-      "lng": -78.5276
+      "lat": -27.7847826483679,
+      "lng": -78.5363455048755
     }
   },
   {

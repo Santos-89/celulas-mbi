@@ -47,24 +47,84 @@ export async function fetchLiveCells(): Promise<CellGroup[]> {
             const address = getField(row, ['DIRECCION', 'DIRECCIÓN', 'UBICACION', 'UBICACIÓN', 'DIRECION']) || '';
             const neighborhood = getField(row, ['BARRIO', 'SECTOR']) || address;
 
+            // Default coordinates (Centura Group area / Quito south)
             let lat = -0.2820;
             let lng = -78.5276;
 
             const rowLat = getField(row, ['LATITUD', 'LAT', 'COORDENADA Y', 'Y']);
-            const rowLng = getField(row, ['LONGITUD', 'LNG', 'LON', 'COORDENADA X', 'X']);
+            const rowLng = getField(row, ['LONGITUD', 'LNG', 'COORDENADA X', 'X']);
 
-            if (rowLat && rowLng) {
-                lat = parseFloat(rowLat);
-                lng = parseFloat(rowLng);
+            // Helper to parse coordinate and fix "huge integer" issue
+            const parseCoord = (val: any) => {
+                if (val === undefined || val === null || val === '') return null;
+
+                // Convert to string and clean up
+                let str = String(val).trim().replace(',', '.');
+
+                // If there are multiple dots (e.g. -78.570.579), keep only the first one
+                const dots = str.split('.');
+                if (dots.length > 2) {
+                    str = dots[0] + '.' + dots.slice(1).join('');
+                }
+
+                let num = parseFloat(str);
+                if (isNaN(num)) return null;
+
+                // Fix for shifted decimals or large integers (common in Excel/Google Sheets exports)
+                // We target the Quito range: Lat [-1, 1], Lng [-85, -70]
+                const abs = Math.abs(num);
+
+                if (abs > 1000) {
+                    // Huge integer case: scale down until it's reasonable
+                    while (Math.abs(num) > 100) num = num / 10;
+                }
+
+                // Final range adjustment for Quito (Lat ~-0.2, Lng ~-78)
+                if (num < 0) {
+                    const a = Math.abs(num);
+                    if (a > 1) {
+                        const firstDigit = String(a).replace('.', '')[0];
+                        if (firstDigit === '2' || firstDigit === '3' || a < 10) {
+                            // Likely Latitude shifted: e.g. -2.8 or -28.2 or -282 -> -0.x
+                            while (Math.abs(num) >= 1) num = num / 10;
+                        } else {
+                            // Likely Longitude shifted: e.g. -785.x -> -78.x
+                            while (Math.abs(num) > 90) num = num / 10;
+                        }
+                    }
+                }
+
+                return num;
+            };
+
+            const parsedLat = parseCoord(rowLat);
+            const parsedLng = parseCoord(rowLng);
+
+            if (parsedLat !== null && parsedLng !== null) {
+                lat = parsedLat;
+                lng = parsedLng;
             } else {
-                const b = neighborhood.toLowerCase();
-                if (b.includes('chillogallo')) { lat = -0.2775; lng = -78.5750; }
-                else if (b.includes('solanda')) { lat = -0.2659; lng = -78.5353; }
-                else if (b.includes('quitumbe')) { lat = -0.2954; lng = -78.5550; }
-                else if (b.includes('guamaní')) { lat = -0.3286; lng = -78.5598; }
-                else if (b.includes('argelia')) { lat = -0.2758; lng = -78.5261; }
-                else if (b.includes('pueblo unido')) { lat = -0.2980; lng = -78.5500; }
-                else if (b.includes('santa rita')) { lat = -0.2721; lng = -78.5445; }
+                // Try to parse from "UBICACIÓN MAPS" if it contains "lat,lng"
+                const mapsLink = getField(row, ['UBICACION MAPS', 'UBICACIÓN MAPS', 'GOOGLE MAPS', 'MAPS']);
+                if (typeof mapsLink === 'string' && mapsLink.includes(',')) {
+                    const parts = mapsLink.split(',').map(p => parseFloat(p.trim()));
+                    if (parts.length >= 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+                        lat = parts[0];
+                        lng = parts[1];
+                    }
+                }
+
+                // If still default, use neighborhood fallback
+                if (lat === -0.2820 && lng === -78.5276) {
+                    const b = neighborhood.toLowerCase();
+                    if (b.includes('chillogallo')) { lat = -0.2775; lng = -78.5750; }
+                    else if (b.includes('solanda')) { lat = -0.2659; lng = -78.5353; }
+                    else if (b.includes('quitumbe')) { lat = -0.2954; lng = -78.5550; }
+                    else if (b.includes('guamaní')) { lat = -0.3286; lng = -78.5598; }
+                    else if (b.includes('argelia')) { lat = -0.2758; lng = -78.5261; }
+                    else if (b.includes('pueblo unido')) { lat = -0.2980; lng = -78.5500; }
+                    else if (b.includes('santa rita')) { lat = -0.2721; lng = -78.5445; }
+                }
             }
 
             return {

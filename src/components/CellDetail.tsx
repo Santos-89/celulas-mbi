@@ -28,7 +28,9 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
     };
 
     const handleNavigate = () => {
-        window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cell.address)}`, "_blank");
+        const { lat, lng } = cell.coordinates;
+        const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+        window.open(url, "_blank");
     };
 
     const handleWhatsApp = () => {
@@ -68,12 +70,11 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
                 </div>
 
                 <div className="flex items-start gap-4 bg-background/40 p-5 rounded-[2rem] border border-border/30">
-                    <div className="p-2.5 bg-primary/10 rounded-xl">
+                    <div className="p-2.5 bg-primary/10 rounded-xl shrink-0">
                         <MapPin className="w-5 h-5 text-primary" />
                     </div>
                     <div className="text-sm">
-                        <p className="font-bold text-foreground mb-1">{cell.neighborhood}</p>
-                        <p className="text-gray-400 text-xs leading-relaxed">{cell.address}</p>
+                        <p className="font-bold text-foreground leading-snug">{cell.neighborhood}</p>
                     </div>
                 </div>
             </div>
