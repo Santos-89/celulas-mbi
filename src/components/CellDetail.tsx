@@ -69,12 +69,12 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
                     </div>
                 </div>
 
-                <div className="flex items-start gap-4 bg-background/40 p-5 rounded-[2rem] border border-border/30">
-                    <div className="p-2.5 bg-primary/10 rounded-xl shrink-0">
+                <div className="flex items-center gap-4 bg-background/40 p-4 rounded-3xl border border-border/30">
+                    <div className="p-2 bg-primary/10 rounded-2xl shrink-0">
                         <MapPin className="w-5 h-5 text-primary" />
                     </div>
-                    <div className="text-sm">
-                        <p className="font-bold text-foreground leading-snug">{cell.neighborhood}</p>
+                    <div className="min-w-0">
+                        <p className="font-bold text-foreground leading-snug truncate">{cell.neighborhood}</p>
                     </div>
                 </div>
             </div>
