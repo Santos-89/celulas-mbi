@@ -110,10 +110,6 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
                         <div className="p-2 bg-primary/10 rounded-2xl shrink-0 mt-0.5">
                             <MapPin className="w-5 h-5 text-primary" />
                         </div>
-                        <div className="min-w-0">
-                            <p className="font-bold text-foreground leading-snug">{cell.neighborhood}</p>
-                            <p className="text-xs text-gray-400 mt-1">{cell.address}</p>
-                        </div>
                     </motion.div>
                 </div>
 
