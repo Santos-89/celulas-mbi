@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
     "build": "node import-excel.mjs && next build",
-    "build-cf": "node import-excel.mjs && npx @cloudflare/next-on-pages",
+    "deploy": "node import-excel.mjs && npx @cloudflare/next-on-pages",
     "start": "next start",
     "lint": "eslint",
     "sync-data": "node import-excel.mjs"
