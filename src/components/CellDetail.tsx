@@ -22,7 +22,6 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
         
         return {
             chatUrl: `https://wa.me/${fullNumber}?text=${chatMessage}`,
-            callUrl: `whatsapp://call?phone=${fullNumber}`,
             isValid: cleanNumber.length >= 7
         };
     }, [cell]);
@@ -40,12 +39,6 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
     const handleWhatsApp = () => {
         if (whatsappData.isValid) {
             window.location.href = whatsappData.chatUrl;
-        }
-    };
-
-    const handleWhatsAppCall = () => {
-        if (whatsappData.isValid) {
-            window.location.href = whatsappData.callUrl;
         }
     };
 
@@ -109,71 +102,46 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
                 </motion.div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-                {/* 1. Llamada Normal */}
-                <motion.div whileTap={{ scale: 0.95 }} className="w-full">
-                    <button 
-                        onClick={handleCall} 
-                        className="flex flex-col items-center justify-center gap-1.5 bg-primary text-white font-bold rounded-3xl shadow-lg h-24 w-full transition-all"
-                    >
-                        <div className="p-2.5 bg-white/20 rounded-xl">
+            <div className="flex flex-col gap-3">
+                <div className="grid grid-cols-2 gap-3">
+                    {/* 1. Llamada Normal */}
+                    <motion.div whileTap={{ scale: 0.95 }} className="w-full">
+                        <button 
+                            onClick={handleCall} 
+                            className="flex items-center justify-center gap-3 bg-primary text-white font-bold rounded-2xl shadow-lg h-14 w-full transition-all"
+                        >
                             <Phone className="w-5 h-5" />
+                            <span className="text-sm">Llamar</span>
+                        </button>
+                    </motion.div>
+
+                    {/* 2. WhatsApp Chat */}
+                    {whatsappData.isValid ? (
+                        <motion.div whileTap={{ scale: 0.95 }} className="w-full">
+                            <button
+                                onClick={handleWhatsApp}
+                                className="flex items-center justify-center gap-3 bg-[#25D366] text-white font-bold rounded-2xl shadow-lg shadow-green-500/20 h-14 w-full transition-all"
+                            >
+                                <MessageCircle className="w-5 h-5" />
+                                <span className="text-sm">WhatsApp</span>
+                            </button>
+                        </motion.div>
+                    ) : (
+                        <div className="flex items-center justify-center gap-3 bg-gray-100 text-gray-400 font-bold rounded-2xl h-14 w-full opacity-50 cursor-not-allowed">
+                            <MessageCircle className="w-5 h-5" />
+                            <span className="text-sm">WhatsApp</span>
                         </div>
-                        <span className="text-[10px] uppercase tracking-wider">Llamar</span>
-                    </button>
-                </motion.div>
+                    )}
+                </div>
 
-                {/* 2. Llamada por WhatsApp */}
-                {whatsappData.isValid ? (
-                    <motion.div whileTap={{ scale: 0.95 }} className="w-full">
-                        <button
-                            onClick={handleWhatsAppCall}
-                            className="flex flex-col items-center justify-center gap-1.5 bg-[#25D366] text-white font-bold rounded-3xl shadow-lg shadow-green-500/20 h-24 w-full transition-all"
-                        >
-                            <div className="p-2.5 bg-white/20 rounded-xl relative">
-                                <Phone className="w-5 h-5" />
-                                <div className="absolute top-0 right-0 w-2 h-2 bg-white rounded-full border border-green-500" />
-                            </div>
-                            <span className="text-[10px] uppercase tracking-wider">Llamar WA</span>
-                        </button>
-                    </motion.div>
-                ) : (
-                    <div className="flex flex-col items-center justify-center gap-1.5 bg-gray-100 text-gray-400 font-bold rounded-3xl h-24 w-full opacity-50 cursor-not-allowed">
-                        <Phone className="w-5 h-5" />
-                        <span className="text-[10px] uppercase tracking-wider">Llamar WA</span>
-                    </div>
-                )}
-
-                {/* 3. WhatsApp Chat */}
-                {whatsappData.isValid ? (
-                    <motion.div whileTap={{ scale: 0.95 }} className="w-full">
-                        <button
-                            onClick={handleWhatsApp}
-                            className="flex flex-col items-center justify-center gap-1.5 bg-background border border-border hover:bg-muted/30 text-foreground font-bold rounded-3xl h-24 w-full transition-all"
-                        >
-                            <div className="p-2.5 bg-[#25D366]/10 rounded-xl">
-                                <MessageCircle className="w-5 h-5 text-[#25D366]" />
-                            </div>
-                            <span className="text-[10px] uppercase tracking-wider">WhatsApp</span>
-                        </button>
-                    </motion.div>
-                ) : (
-                    <div className="flex flex-col items-center justify-center gap-1.5 bg-gray-100 text-gray-400 font-bold rounded-3xl h-24 w-full opacity-50 cursor-not-allowed">
-                        <MessageCircle className="w-5 h-5" />
-                        <span className="text-[10px] uppercase tracking-wider">WhatsApp</span>
-                    </div>
-                )}
-
-                {/* 4. Navegación GPS */}
-                <motion.div whileTap={{ scale: 0.95 }} className="w-full">
+                {/* 3. Navegación GPS */}
+                <motion.div whileTap={{ scale: 0.98 }} className="w-full">
                     <button 
                         onClick={handleNavigate}
-                        className="flex flex-col items-center justify-center gap-1.5 bg-background border border-border hover:bg-muted/30 text-foreground font-bold rounded-3xl h-24 w-full transition-all"
+                        className="flex items-center justify-center gap-3 bg-background border border-border hover:bg-muted/30 text-foreground font-bold rounded-2xl h-14 w-full transition-all"
                     >
-                        <div className="p-2.5 bg-primary/10 rounded-xl">
-                            <Navigation className="w-5 h-5 text-primary" />
-                        </div>
-                        <span className="text-[10px] uppercase tracking-wider">¿Cómo llegar?</span>
+                        <Navigation className="w-5 h-5 text-primary" />
+                        <span className="text-sm">¿Cómo llegar?</span>
                     </button>
                 </motion.div>
             </div>
