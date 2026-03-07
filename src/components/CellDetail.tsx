@@ -19,11 +19,10 @@ export function CellDetail({ cell, onClose }: CellDetailProps) {
         const fullNumber = cleanNumber.startsWith("593") ? cleanNumber : `593${cleanNumber}`;
         
         const chatMessage = encodeURIComponent(`¡Hola ${cell.leaderName}! Vi tu célula en la app de la iglesia y me gustaría asistir. ¿Me puedes ayudar con más información por favor?`);
-        const callRequestMessage = encodeURIComponent(`¡Hola ${cell.leaderName}! Me gustaría tener una llamada de WhatsApp contigo para saber más de la célula. ¿Podrías atenderme?`);
         
         return {
             chatUrl: `https://wa.me/${fullNumber}?text=${chatMessage}`,
-            callUrl: `https://wa.me/${fullNumber}?text=${callRequestMessage}`,
+            callUrl: `whatsapp://call?phone=${fullNumber}`,
             isValid: cleanNumber.length >= 7
         };
     }, [cell]);
