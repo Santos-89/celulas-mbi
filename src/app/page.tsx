@@ -1,7 +1,8 @@
 // src/app/page.tsx
 import HomeClient from "@/components/HomeClient";
 
-// Obligamos a Vercel a renderizar dinámicamente (adiós 404)
+// Obligamos a Cloudflare/Vercel a usar el Edge Runtime y renderizado dinámico
+export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 export default function Page() {

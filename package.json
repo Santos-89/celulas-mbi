@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
-    "build": "node import-excel.mjs && npx @cloudflare/next-on-pages",
+    "build": "node import-excel.mjs && next build",
+    "build-cf": "node import-excel.mjs && npx @cloudflare/next-on-pages",
     "start": "next start",
     "lint": "eslint",
-    "sync-data": "node import-excel.mjs",
-    "cf-pages:build": "npx @cloudflare/next-on-pages"
+    "sync-data": "node import-excel.mjs"
   },
   "dependencies": {
     "@fontsource/plus-jakarta-sans": "^5.2.8",
@@ -32,7 +32,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "^15.5.12",
+    "eslint-config-next": "15.5.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
