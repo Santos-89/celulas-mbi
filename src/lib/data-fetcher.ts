@@ -2,7 +2,6 @@ import * as XLSX from 'xlsx';
 import { CellGroup } from '../types';
 
 const EXCEL_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSW4b28Ow3VM5yWIv2RDtzxtj9gVHUPc-Jv17XSRwHvqD3URf06lHaO84lOKp6OSlkOgqNeuiCajZ8a/pub?output=xlsx";
-const CACHE_KEY = "cells_data";
 
 export async function fetchLiveCells(): Promise<CellGroup[]> {
     try {
@@ -140,27 +139,9 @@ export async function fetchLiveCells(): Promise<CellGroup[]> {
             };
         });
 
-        // Cache the data
-        if (typeof window !== "undefined") {
-            localStorage.setItem(CACHE_KEY, JSON.stringify({
-                timestamp: Date.now(),
-                data: processedCells
-            }));
-        }
-
         return processedCells;
     } catch (error) {
         console.error("❌ Error fetching live data:", error);
-
-        // Try to return cached data
-        if (typeof window !== "undefined") {
-            const cached = localStorage.getItem(CACHE_KEY);
-            if (cached) {
-                const { data } = JSON.parse(cached);
-                return data;
-            }
-        }
-
         throw error;
     }
 }

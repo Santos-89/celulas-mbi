@@ -15,9 +15,9 @@ const CellMap = dynamic(() => import("@/components/CellMap"), {
   loading: () => <div className="w-full h-full bg-card animate-pulse flex items-center justify-center text-gray-400">Cargando mapa...</div>
 });
 
-export default function HomeClient() {
-  const [cells, setCells] = useState<CellGroup[]>(SAMPLE_CELLS);
-  const [loading, setLoading] = useState(true);
+export default function HomeClient({ initialData = SAMPLE_CELLS }: { initialData?: CellGroup[] }) {
+  const [cells, setCells] = useState<CellGroup[]>(initialData);
+  const [loading, setLoading] = useState(false);
   const [selectedCell, setSelectedCell] = useState<CellGroup | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"map" | "list">("map");
@@ -77,7 +77,6 @@ export default function HomeClient() {
     } catch (err) {
       console.error("Could not load live data", err);
     } finally {
-      setLoading(false);
       setIsRefreshing(false);
     }
   };
@@ -87,7 +86,7 @@ export default function HomeClient() {
       const savedTime = localStorage.getItem("last_sync_time");
       if (savedTime) setLastSync(savedTime);
     }
-    initData();
+    // No longer need to fetch on mount as we have initialData
   }, []);
 
   const filteredCells = useMemo(() => {
