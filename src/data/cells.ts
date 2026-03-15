@@ -22,8 +22,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "type": "Adultos",
     "day": "Miércoles",
     "time": "6:00 PM",
-    "address": "Calle Macuchi 246 y Cuyuja (La Argelia Alta)",
-    "neighborhood": "Calle Macuchi 246 y Cuyuja (La Argelia Alta)",
+    "address": "Calle Macuchi 246 y Cuyuja",
+    "neighborhood": "La Argelia Alta",
     "coordinates": {
       "lat": -0.2758,
       "lng": -78.5261
@@ -36,8 +36,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "type": "Adultos",
     "day": "Miércoles",
     "time": "7:00 PM",
-    "address": "Ferroviaria, Calle nariz del diablo y Carlos Alvarez EO-147",
-    "neighborhood": "Ferroviaria, Calle nariz del diablo y Carlos Alvarez EO-147",
+    "address": "Calle nariz del diablo y Carlos Alvarez EO-147",
+    "neighborhood": "Ferroviaria",
     "coordinates": {
       "lat": -0.282,
       "lng": -78.5276
@@ -120,8 +120,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "type": "Adultos",
     "day": "Miércoles",
     "time": "7:00 PM",
-    "address": "Calle C E6-105 y Calle J - Edén del Sur",
-    "neighborhood": "Calle C E6-105 y Calle J - Edén del Sur",
+    "address": "Calle C E6-105 y Calle J",
+    "neighborhood": "Edén del Sur",
     "coordinates": {
       "lat": -0.282,
       "lng": -78.5276
@@ -148,8 +148,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "type": "Adultos",
     "day": "Sábado",
     "time": "6:00 PM",
-    "address": "Calle C E6-105 y Calle J - Edén del Sur",
-    "neighborhood": "Calle C E6-105 y Calle J - Edén del Sur",
+    "address": "Calle C E6-105 y Calle J",
+    "neighborhood": "Edén del Sur",
     "coordinates": {
       "lat": -0.282,
       "lng": -78.5276
@@ -232,8 +232,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "type": "Adultos",
     "day": "Martes",
     "time": "7:00 PM",
-    "address": "Santa Rita, Urbanización Caminos del Sur",
-    "neighborhood": "Santa Rita, Urbanización Caminos del Sur",
+    "address": "Urbanización Caminos del Sur",
+    "neighborhood": "Santa Rita",
     "coordinates": {
       "lat": -0.272096,
       "lng": -78.55432
@@ -246,8 +246,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "type": "Adultos",
     "day": "Martes",
     "time": "7:15 PM",
-    "address": "Lirañan y calle #5, Quitumbe",
-    "neighborhood": "Lirañan y calle #5, Quitumbe",
+    "address": "Lirañan y calle #5",
+    "neighborhood": "Quitumbe",
     "coordinates": {
       "lat": -0.2954,
       "lng": -78.555
@@ -302,8 +302,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "type": "Niños",
     "day": "Martes",
     "time": "7:15 PM",
-    "address": "Lirañan y calle #5, Quitumbe",
-    "neighborhood": "Lirañan y calle #5, Quitumbe",
+    "address": "Lirañan y calle #5",
+    "neighborhood": "Quitumbe",
     "coordinates": {
       "lat": -0.2954,
       "lng": -78.555
@@ -316,8 +316,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "type": "Niños",
     "day": "Martes",
     "time": "7:00 PM",
-    "address": "Santa Rita, Urbanización Caminos del Sur",
-    "neighborhood": "Santa Rita, Urbanización Caminos del Sur",
+    "address": "Urbanización Caminos del Sur",
+    "neighborhood": "Santa Rita",
     "coordinates": {
       "lat": -0.2721,
       "lng": -78.5445
@@ -345,7 +345,7 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "day": "Miércoles",
     "time": "7:15 PM",
     "address": "Urbanización Caminos del Sur",
-    "neighborhood": "Urbanización Caminos del Sur",
+    "neighborhood": "Santa Rita",
     "coordinates": {
       "lat": -0.272096,
       "lng": -78.55432
@@ -387,10 +387,10 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "day": "Miércoles",
     "time": "7:15 PM",
     "address": "Urbanización Caminos del Sur",
-    "neighborhood": "Urbanización Caminos del Sur",
+    "neighborhood": "Santa Rita",
     "coordinates": {
-      "lat": -0.282,
-      "lng": -78.5276
+      "lat": -0.2721,
+      "lng": -78.5445
     }
   },
   {
@@ -428,8 +428,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "type": "Adultos",
     "day": "Miércoles",
     "time": "7:30 PM",
-    "address": "Chillogallo, El Tránsito - Isabel Herreria y Calle B OE13B-160",
-    "neighborhood": "Chillogallo, El Tránsito - Isabel Herreria y Calle B OE13B-160",
+    "address": "El Tránsito - Isabel Herreria y Calle B OE13B-160",
+    "neighborhood": "Chillogallo",
     "coordinates": {
       "lat": -0.282713,
       "lng": -78.570569
@@ -443,7 +443,7 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "day": "Miércoles",
     "time": "7:00 PM",
     "address": "Santa Martha",
-    "neighborhood": "Santa Martha",
+    "neighborhood": "Santa Marta",
     "coordinates": {
       "lat": -0.282,
       "lng": -78.5276
@@ -456,8 +456,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "type": "Online",
     "day": "Miércoles",
     "time": "7:00 PM",
-    "address": "Chillogallo, El Tránsito - Isabel Herreria y Calle B OE13B-160",
-    "neighborhood": "Chillogallo, El Tránsito - Isabel Herreria y Calle B OE13B-160",
+    "address": "El Tránsito - Isabel Herreria y Calle B OE13B-160",
+    "neighborhood": "Chillogallo",
     "coordinates": {
       "lat": -0.282713,
       "lng": -78.570569
@@ -484,8 +484,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "type": "Niños",
     "day": "Viernes",
     "time": "7:30 PM",
-    "address": "Chillogallo, El Tránsito - Isabel Herreria y Calle B OE13B-160",
-    "neighborhood": "Chillogallo, El Tránsito - Isabel Herreria y Calle B OE13B-160",
+    "address": "El Tránsito - Isabel Herreria y Calle B OE13B-160",
+    "neighborhood": "Chillogallo",
     "coordinates": {
       "lat": -0.282713,
       "lng": -78.570569
@@ -550,12 +550,12 @@ export const SAMPLE_CELLS: CellGroup[] = [
   {
     "id": "40",
     "leaderName": "Vanessa Chuchimbe",
-    "leaderPhone": "",
+    "leaderPhone": "099 823 2874",
     "type": "Adultos",
     "day": "Miércoles",
     "time": "7:00 PM",
-    "address": "Santa Rita, Conjunto Santorini",
-    "neighborhood": "Santa Rita, Conjunto Santorini",
+    "address": "Conjunto Santorini",
+    "neighborhood": "Santa Rita",
     "coordinates": {
       "lat": -0.2721,
       "lng": -78.5445
@@ -564,7 +564,7 @@ export const SAMPLE_CELLS: CellGroup[] = [
   {
     "id": "41",
     "leaderName": "Santiago Benalcázar",
-    "leaderPhone": "",
+    "leaderPhone": "098 367 7751",
     "type": "Adultos",
     "day": "Miércoles",
     "time": "7:00 PM",
@@ -578,12 +578,12 @@ export const SAMPLE_CELLS: CellGroup[] = [
   {
     "id": "42",
     "leaderName": "Jessica Sanguano ",
-    "leaderPhone": "",
+    "leaderPhone": "098 998 5644",
     "type": "Adultos",
     "day": "Martes",
     "time": "6:30 PM",
     "address": "La Magdalena - Marco Bamba",
-    "neighborhood": "La Magdalena - Marco Bamba",
+    "neighborhood": "La Magdalena",
     "coordinates": {
       "lat": -0.282,
       "lng": -78.5276
@@ -592,7 +592,7 @@ export const SAMPLE_CELLS: CellGroup[] = [
   {
     "id": "43",
     "leaderName": "Andrea Tigse",
-    "leaderPhone": "",
+    "leaderPhone": "095 879 7721",
     "type": "Adultos",
     "day": "Martes",
     "time": "7:00 PM",
@@ -606,12 +606,12 @@ export const SAMPLE_CELLS: CellGroup[] = [
   {
     "id": "44",
     "leaderName": "Sandy Pullupaxi",
-    "leaderPhone": "",
+    "leaderPhone": "099 858 8373",
     "type": "Adultos",
     "day": "Martes",
     "time": "7:00 PM",
     "address": "Millers y Necochea",
-    "neighborhood": "Millers y Necochea",
+    "neighborhood": "Dos Puentes",
     "coordinates": {
       "lat": -0.282,
       "lng": -78.5276
@@ -1002,8 +1002,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "type": "Jóvenes",
     "day": "Sábado",
     "time": "4:00 PM",
-    "address": "Ciudadela El Ejército - Primera Etapa",
-    "neighborhood": "Ciudadela El Ejército - Primera Etapa",
+    "address": "Cdla. del Ejército, Av. Gral. Jose Gallardo S43D",
+    "neighborhood": "Cdla. del Ejército, Av. Gral. Jose Gallardo S43D",
     "coordinates": {
       "lat": -0.282,
       "lng": -78.5276
@@ -1016,11 +1016,11 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "type": "Jóvenes",
     "day": "Sábado",
     "time": "1:00 PM",
-    "address": "Guamaní - El Corazón",
-    "neighborhood": "Guamaní - El Corazón",
+    "address": "Ferrocariles del Ecuador E.P E5",
+    "neighborhood": "Ferrocariles del Ecuador E.P E5",
     "coordinates": {
-      "lat": -0.3286,
-      "lng": -78.5598
+      "lat": -0.282,
+      "lng": -78.5276
     }
   },
   {
@@ -1030,8 +1030,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "type": "Jóvenes",
     "day": "Sábado",
     "time": "2:00 PM",
-    "address": "Solanda",
-    "neighborhood": "Solanda",
+    "address": "Solanda, Salvador Bravo y Benancio Estandoque",
+    "neighborhood": "Solanda, Salvador Bravo y Benancio Estandoque",
     "coordinates": {
       "lat": -0.2659,
       "lng": -78.5353
@@ -1044,8 +1044,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "type": "Jóvenes",
     "day": "Sábado",
     "time": "2:00 PM",
-    "address": "Ciudadela El Ejército - Primera Etapa",
-    "neighborhood": "Ciudadela El Ejército - Primera Etapa",
+    "address": "Guayanay Ñan OE3D 2:00pm",
+    "neighborhood": "Guayanay Ñan OE3D 2:00pm",
     "coordinates": {
       "lat": -0.282,
       "lng": -78.5276
@@ -1058,8 +1058,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "type": "Jóvenes",
     "day": "Viernes",
     "time": "7:30 PM",
-    "address": "Ciudadela El Ejército - Primera Etapa",
-    "neighborhood": "Ciudadela El Ejército - Primera Etapa",
+    "address": "Cdla. del Ejército, Av. Gral. Jose Gallardo S43D",
+    "neighborhood": "Cdla. del Ejército, Av. Gral. Jose Gallardo S43D",
     "coordinates": {
       "lat": -0.282,
       "lng": -78.5276
@@ -1072,8 +1072,8 @@ export const SAMPLE_CELLS: CellGroup[] = [
     "type": "Niños",
     "day": "Sábado",
     "time": "8:30 PM",
-    "address": "Ciudadela El Ejército - Primera Etapa",
-    "neighborhood": "Ciudadela El Ejército - Primera Etapa",
+    "address": "Cdla. del Ejército, Av. Gral. Jose Gallardo S43D",
+    "neighborhood": "Cdla. del Ejército, Av. Gral. Jose Gallardo S43D",
     "coordinates": {
       "lat": -0.282,
       "lng": -78.5276

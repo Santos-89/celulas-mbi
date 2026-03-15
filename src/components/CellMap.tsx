@@ -66,7 +66,7 @@ function LocationButton() {
     }, [map]);
 
     return (
-        <div className="leaflet-bottom leaflet-right mb-24 mr-4">
+        <div className="leaflet-bottom leaflet-right mb-[calc(6rem+env(safe-area-inset-bottom))] mr-4">
             <button
                 onClick={findMe}
                 className={`p-3 bg-card border border-border rounded-2xl shadow-premium text-primary hover:bg-border transition-all active:scale-95 pointer-events-auto ${loading ? "animate-pulse" : ""}`}

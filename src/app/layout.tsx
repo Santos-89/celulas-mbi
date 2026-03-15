@@ -11,8 +11,8 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "black-translucent",
-    title: "Células Iglesia",
+    statusBarStyle: "default",
+    title: "Células MBI",
   },
   icons: {
     apple: "/icon-512.png",

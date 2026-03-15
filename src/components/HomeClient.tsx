@@ -369,7 +369,7 @@ export default function HomeClient({ initialData = SAMPLE_CELLS }: { initialData
       </div>
 
       {/* Bottom Controls (Mobile) */}
-      <div className="absolute bottom-8 left-0 right-0 z-[60] pointer-events-none flex justify-center px-6">
+      <div className="absolute bottom-[calc(2rem+env(safe-area-inset-bottom))] left-0 right-0 z-[60] pointer-events-none flex justify-center px-6">
         <motion.div 
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
