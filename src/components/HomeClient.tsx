@@ -7,10 +7,11 @@ import { CellDetail } from "@/components/CellDetail";
 import { SAMPLE_CELLS } from "@/data/cells";
 import { CellGroup } from "@/types";
 import { fetchLiveCells } from "@/lib/data-fetcher";
-import { Search, SlidersHorizontal, Map as MapIcon, List as ListIcon, X, Loader2, RefreshCw, Navigation } from "lucide-react";
+import { Search, SlidersHorizontal, Map as MapIcon, List as ListIcon, X, RefreshCw, Navigation } from "lucide-react";
 import { Badge, Card } from "@/components/ui/Card";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { SplashScreen } from "@/components/SplashScreen";
 
 const CellMap = dynamic(() => import("@/components/CellMap"), {
   ssr: false,
@@ -19,7 +20,6 @@ const CellMap = dynamic(() => import("@/components/CellMap"), {
 
 export default function HomeClient({ initialData = SAMPLE_CELLS }: { initialData?: CellGroup[] }) {
   const [cells, setCells] = useState<CellGroup[]>(initialData);
-  const [loading, setLoading] = useState(false);
   const [selectedCell, setSelectedCell] = useState<CellGroup | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"map" | "list">("map");
@@ -27,10 +27,15 @@ export default function HomeClient({ initialData = SAMPLE_CELLS }: { initialData
   const [filterType, setFilterType] = useState<string>("Todas");
   const [filterDay, setFilterDay] = useState<string>("Todos");
 
-  const [lastSync, setLastSync] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isLocating, setIsLocating] = useState(false);
+  const [showSplash, setShowSplash] = useState(false);
+
+  // Evitar hydration mismatch renderizando el splash solo después de montar
+  useEffect(() => {
+    setShowSplash(true);
+  }, []);
 
   // Haversine formula to calculate distance in km
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
@@ -72,7 +77,6 @@ export default function HomeClient({ initialData = SAMPLE_CELLS }: { initialData
       const liveData = await fetchLiveCells();
       setCells(liveData);
       const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      setLastSync(now);
       if (typeof window !== "undefined") {
         localStorage.setItem("last_sync_time", now);
       }
@@ -84,14 +88,17 @@ export default function HomeClient({ initialData = SAMPLE_CELLS }: { initialData
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const savedTime = localStorage.getItem("last_sync_time");
-      if (savedTime) setLastSync(savedTime);
-    }
+    // Auto-sync every 5 minutes
+    const interval = setInterval(() => {
+      console.log("🔄 Background auto-sync starting...");
+      initData();
+    }, 5 * 60 * 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const filteredCells = useMemo(() => {
-    let result = cells.filter((cell) => {
+    const result = cells.filter((cell) => {
       const matchesSearch =
         cell.leaderName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         cell.neighborhood.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -122,6 +129,10 @@ export default function HomeClient({ initialData = SAMPLE_CELLS }: { initialData
 
   return (
     <main className="relative flex flex-col h-screen h-[100dvh] bg-background text-foreground overflow-hidden">
+      <AnimatePresence>
+        {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} durationMs={2700} />}
+      </AnimatePresence>
+
       {/* Header / Search Bar */}
       <div className="fixed top-0 left-0 right-0 z-[100] p-4 md:p-6 bg-gradient-to-b from-background via-background/80 to-transparent mt-safe">
         <div className="flex flex-col gap-4 max-w-2xl mx-auto">
