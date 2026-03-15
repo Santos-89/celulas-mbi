@@ -1,6 +1,6 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Popup, useMap, Tooltip, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, useMap, Tooltip, useMapEvents } from "react-leaflet";
 import * as L from "leaflet";
 import { CellGroup } from "@/types";
 import { useEffect, useState, useCallback } from "react";
@@ -127,6 +127,8 @@ export default function CellMap({ cells, onSelectCell, onMapClick, selectedCellI
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    keepBuffer={8}
+                    maxZoom={19}
                 />
 
                 {cells.map((cell, index) => {

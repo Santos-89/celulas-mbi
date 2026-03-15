@@ -33,8 +33,15 @@ export default function HomeClient({ initialData = SAMPLE_CELLS }: { initialData
   const [showSplash, setShowSplash] = useState(false);
 
   // Evitar hydration mismatch renderizando el splash solo después de montar
+  // Y registrar el Service Worker para caché offline
   useEffect(() => {
     setShowSplash(true);
+
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js")
+        .then((reg) => console.log("Service Worker registered (Map Cache):", reg.scope))
+        .catch((err) => console.error("Service Worker registration failed:", err));
+    }
   }, []);
 
   // Haversine formula to calculate distance in km

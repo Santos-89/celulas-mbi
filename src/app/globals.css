@@ -59,8 +59,11 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
   min-height: 100vh;
   min-height: 100dvh;
+  width: 100vw;
+  overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  box-sizing: border-box;
 }
 
 .mt-safe {
@@ -143,4 +146,10 @@ body {
 
 .dark .leaflet-container {
   background: #0f172a;
+}
+
+/* Fix mobile overflow explicitly */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
 }
